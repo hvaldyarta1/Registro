@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -24,6 +25,7 @@ import java.util.List;
 import app.rsprmobile.registro.adapter.AdapterJadwal;
 import app.rsprmobile.registro.app.AppController;
 import app.rsprmobile.registro.data.DataJadwal;
+import app.rsprmobile.registro.utilitas.Server;
 
 
 /**
@@ -32,7 +34,7 @@ import app.rsprmobile.registro.data.DataJadwal;
 public class JadwalDokter extends Fragment {
     ListView listJadwal;
     AdapterJadwal adapterJadwal;
-    public static final String urlJadwal = "jadwaldokter-v04-0.0.1/Jadwal/JadwalDokterDenganIdDokter/";
+    public static final String urlJadwal = Server.URL + "jadwaldokter-v04-0.0.1/Jadwal/JadwalDokterDenganIdDokter/";
     List<DataJadwal> itemJadwal = new ArrayList<DataJadwal>();
 
     private static final String TAG = MainActivity.class.getSimpleName();
@@ -55,7 +57,14 @@ public class JadwalDokter extends Fragment {
         adapterJadwal = new AdapterJadwal(getActivity(), itemJadwal);
         listJadwal.setAdapter(adapterJadwal);
 
-        Bundle dokter = new Bundle();
+        Bundle bundleDokter = getArguments();
+        String dokterId = bundleDokter.getString("iddokter");
+        String namaDokter = bundleDokter.getString("namaDokter");
+
+        TextView txtNamaDokter = (TextView) viewJadwal.findViewById(R.id.namaDokter);
+        txtNamaDokter.setText(namaDokter);
+
+        jadwalDokter(dokterId);
 
 
     return viewJadwal;
