@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">Registro</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="nama_dokter_jadwal">Nama Dokter</string>
+    <string name="ruang_periksa_jadwal">Ruang Periksa</string>
+    <string name="nama_klinik_jadwal">Nama Klinik</string>
+    <string name="jam_awal_jadwal">Jam Awal</string>
+    <string name="jam_akhir_jadwal">Jam Akhir</string>
+    <string name="kuota_perjam_jadwal">Kuota Per Jam</string>
+    <string name="hari_praktek_jadwal">Hari Praktek</string>
+</resources>

@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ImageView
+        android:id="@+id/iconNamaKlinik"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/nama"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/iconRuangPeriksa"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/ruang"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/iconNamaKlinik" />
+
+    <ImageView
+        android:id="@+id/iconJam"
+        android:layout_width="36dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/jam"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/iconRuangPeriksa" />
+
+    <ImageView
+        android:id="@+id/iconKuota"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/kuota"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/iconJam" />
+
+    <ImageView
+        android:id="@+id/iconHari"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/hari"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/iconKuota" />
+
+    <TextView
+        android:id="@+id/txtNamaKlinik"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/nama_klinik_jadwal"
+        android:textAllCaps="true"
+        app:layout_constraintStart_toEndOf="@+id/iconNamaKlinik"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/txtRuangPeriksa"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        android:text="@string/ruang_periksa_jadwal"
+        app:layout_constraintStart_toEndOf="@+id/iconRuangPeriksa"
+        app:layout_constraintTop_toBottomOf="@+id/txtNamaKlinik" />
+
+    <TextView
+        android:id="@+id/txtJamAwal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="32dp"
+        android:text="@string/jam_awal_jadwal"
+        app:layout_constraintStart_toEndOf="@+id/iconJam"
+        app:layout_constraintTop_toBottomOf="@+id/txtRuangPeriksa" />
+
+    <TextView
+        android:id="@+id/txtJamAkhir"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="@string/jam_akhir_jadwal"
+        app:layout_constraintBaseline_toBaselineOf="@+id/txtJamAwal"
+        app:layout_constraintStart_toEndOf="@+id/txtJamAwal" />
+
+    <TextView
+        android:id="@+id/txtKuotaPasien"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="26dp"
+        android:text="@string/kuota_perjam_jadwal"
+        app:layout_constraintStart_toEndOf="@+id/iconKuota"
+        app:layout_constraintTop_toBottomOf="@+id/txtJamAkhir" />
+
+    <TextView
+        android:id="@+id/txtHariPraktek"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="26dp"
+        android:text="@string/hari_praktek_jadwal"
+        app:layout_constraintStart_toEndOf="@+id/iconHari"
+        app:layout_constraintTop_toBottomOf="@+id/txtKuotaPasien" />
+
+</android.support.constraint.ConstraintLayout>
