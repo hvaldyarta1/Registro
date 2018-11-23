@@ -46,9 +46,9 @@ public class Login extends AppCompatActivity {
         });
     }
 
-    /*private void prosesLogin(String nomorRM, String tgLahir){
+    private void prosesLogin(String nomorRM, String tgLahir){
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, urlLogin, new Response.Listener<String>() {
+        /*StringRequest stringRequest = new StringRequest(Request.Method.POST, urlLogin, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 Log.e(TAG, "Login response: " + response);
@@ -67,6 +67,6 @@ public class Login extends AppCompatActivity {
 
                 }
             }
-        })
-    }*/
+        })*/
+    }
 }
