@@ -1,7 +1,10 @@
 package app.rsprmobile.registro;
 
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -33,6 +37,8 @@ import app.rsprmobile.registro.utilitas.Server;
  * A simple {@link Fragment} subclass.
  */
 public class Dokter extends Fragment {
+    ProgressDialog progressDialog;
+    AdapterGridDokter adapterGridDokter;
 
     public static final String urlDokter = Server.URL + "jadwaldokter-v04-0.0.1/Jadwal/DataSemuaDokter";
     List<DataDokter> itemdokter = new ArrayList<DataDokter>();
@@ -63,6 +69,10 @@ public class Dokter extends Fragment {
 
     private void dataDokter(){
         itemdokter.clear();
+        progressDialog = new ProgressDialog(getActivity());
+        progressDialog.setCancelable(false);
+        progressDialog.setMessage("Memuat Data Dokter. . .");
+        progressDialog.show();
 
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(urlDokter, new Response.Listener<JSONArray>() {
             @Override
@@ -81,21 +91,33 @@ public class Dokter extends Fragment {
                         itemdokter.add(dataDokter);
 
                         rvDokter.setLayoutManager(new GridLayoutManager(getContext(), 2));
-                        AdapterGridDokter adapterGridDokter = new AdapterGridDokter(getContext(), itemdokter);
+                        adapterGridDokter = new AdapterGridDokter(getContext(), itemdokter);
                         rvDokter.setAdapter(adapterGridDokter);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
+                    adapterGridDokter.notifyDataSetChanged();
+                    progressDialog.dismiss();
+
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 VolleyLog.d(TAG, "Error: " + error.getMessage());
+                Toast.makeText(getContext(), error.getMessage(), Toast.LENGTH_LONG).show();
+                progressDialog.dismiss();
             }
         });
 
         AppController.getInstance().addToRequestQueue(jsonArrayRequest);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        getActivity().setTitle("Dokter");
     }
 
     public interface OnFragmentInteractionListener {

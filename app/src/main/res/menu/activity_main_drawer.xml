@@ -5,17 +5,17 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_camera"
+            android:id="@+id/nav_daftar"
             android:icon="@color/colorAccent"
-            android:title="Poli" />
+            android:title="Daftar Periksa" />
         <item
-            android:id="@+id/nav_gallery"
+            android:id="@+id/nav_dokter"
             android:icon="@color/colorPrimary"
             android:title="Dokter" />
         <item
-            android:id="@+id/nav_slideshow"
+            android:id="@+id/nav_poli"
             android:icon="@color/colorPrimaryDark"
-            android:title="Pendaftaran" />
+            android:title="Poli" />
 
     </group>
 

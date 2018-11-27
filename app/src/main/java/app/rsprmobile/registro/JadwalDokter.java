@@ -1,6 +1,7 @@
 package app.rsprmobile.registro;
 
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -9,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -32,6 +34,8 @@ import app.rsprmobile.registro.utilitas.Server;
  * A simple {@link Fragment} subclass.
  */
 public class JadwalDokter extends Fragment {
+    ProgressDialog progressDialog;
+
     ListView listJadwal;
     AdapterJadwal adapterJadwal;
     public static final String urlJadwal = Server.URL + "jadwaldokter-v04-0.0.1/Jadwal/JadwalDokterDenganIdDokter/";
@@ -73,6 +77,10 @@ public class JadwalDokter extends Fragment {
     private void jadwalDokter(String idDokter){
         itemJadwal.clear();
         adapterJadwal.notifyDataSetChanged();
+        progressDialog = new ProgressDialog(getActivity());
+        progressDialog.setCancelable(true);
+        progressDialog.setMessage("Memuat Jadwal Dokter. . .");
+        progressDialog.show();
 
         JsonArrayRequest jArr = new JsonArrayRequest(urlJadwal + idDokter, new Response.Listener<JSONArray>() {
             @Override
@@ -100,6 +108,7 @@ public class JadwalDokter extends Fragment {
                 }
 
                 adapterJadwal.notifyDataSetChanged();
+                progressDialog.dismiss();
 
             }
         }, new Response.ErrorListener() {
@@ -107,6 +116,8 @@ public class JadwalDokter extends Fragment {
             @Override
             public void onErrorResponse(VolleyError error) {
                 VolleyLog.d(TAG, "Error: " + error.getMessage());
+                Toast.makeText(getContext(), error.getMessage(), Toast.LENGTH_LONG).show();
+                progressDialog.dismiss();
                 /*swipe.setRefreshing(false);*/
             }
         });

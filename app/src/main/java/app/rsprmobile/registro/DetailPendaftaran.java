@@ -11,10 +11,10 @@ import android.view.ViewGroup;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class PilihNomorPendaftaran extends Fragment {
+public class DetailPendaftaran extends Fragment {
 
 
-    public PilihNomorPendaftaran() {
+    public DetailPendaftaran() {
         // Required empty public constructor
     }
 
@@ -23,7 +23,7 @@ public class PilihNomorPendaftaran extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_pilih_nomor_pendaftaran, container, false);
+        return inflater.inflate(R.layout.fragment_detail_pendaftaran, container, false);
     }
 
 }

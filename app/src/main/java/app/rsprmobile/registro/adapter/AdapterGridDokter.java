@@ -2,7 +2,9 @@ package app.rsprmobile.registro.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -45,14 +47,20 @@ public class AdapterGridDokter extends RecyclerView.Adapter<AdapterGridDokter.Vi
             @Override
             public void onClick(View v) {
 
+                AppCompatActivity activity = (AppCompatActivity) v.getContext();
                 String namaDokter = itemDokter.get(position).getNamaDokter();
                 String dokterId = itemDokter.get(position).getDokterId();
 
-                Intent intent = new Intent(v.getContext(), JadwalDokter.class);
-                intent.putExtra("iddokter", dokterId);
-                intent.putExtra("namaDokter", namaDokter);
+                Bundle bundleDokter = new Bundle();
+                bundleDokter.putString("iddokter", dokterId);
+                bundleDokter.putString("namaDokter", namaDokter);
 
-                v.getContext().startActivity(intent);
+                JadwalDokter jadwalDokter = new JadwalDokter();
+                jadwalDokter.setArguments(bundleDokter);
+                activity.getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.fragment_container, jadwalDokter)
+                        .addToBackStack(null).commit();
             }
         });
 
