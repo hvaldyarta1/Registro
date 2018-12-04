@@ -1,17 +1,36 @@
 package app.rsprmobile.registro.data;
 
 public class DataJadwalPoli {
-    String namaKlinik, jamAwal, jamAkhir, hariPraktek;
+    private String namaKlinik, jamAwal, jamAkhir, hariPraktek, kuotaPasien, kuotaPerJam;
 
-    public DataJadwalPoli(String namaKlinik, String jamAwal, String jamAkhir, String hariPraktek){
+    public DataJadwalPoli(String namaKlinik, String jamAwal, String jamAkhir, String hariPraktek,
+                          String kuotaPasien, String kuotaPerJam){
         this.namaKlinik = namaKlinik;
         this.jamAwal = jamAwal;
         this.jamAkhir = jamAkhir;
         this.hariPraktek = hariPraktek;
+        this.kuotaPasien = kuotaPasien;
+        this.kuotaPerJam = kuotaPerJam;
     }
 
     public DataJadwalPoli() {
 
+    }
+
+    public String getKuotaPasien() {
+        return kuotaPasien;
+    }
+
+    public void setKuotaPasien(String kuotaPasien) {
+        this.kuotaPasien = kuotaPasien;
+    }
+
+    public String getKuotaPerJam() {
+        return kuotaPerJam;
+    }
+
+    public void setKuotaPerJam(String kuotaPerJam) {
+        this.kuotaPerJam = kuotaPerJam;
     }
 
     public String getNamaKlinik() {

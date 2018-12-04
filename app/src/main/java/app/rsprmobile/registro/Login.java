@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -80,6 +81,15 @@ public class Login extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        TextView lewati = (TextView) findViewById(R.id.textLewati);
+        lewati.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Login.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
 
         connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         {
@@ -225,7 +235,9 @@ public class Login extends AppCompatActivity {
                         editor.putString(tagNoKartu, noKartu);
                         editor.putString(tagUmur, umur);
                         editor.putString(tagGolDarah, golDarah);
-                        editor.commit();
+                        editor.putString(tagNoRm, noRm);
+                        editor.putString(tagTanggalLahir, tanggalLahir);
+                        editor.apply();
 
                         Toast.makeText(getApplicationContext(), "Selamat datang " + nama, Toast.LENGTH_LONG).show();
 

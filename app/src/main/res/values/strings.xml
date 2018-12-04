@@ -29,4 +29,17 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
+
+    <string-array name="penjamin">
+        <item>-- Pilih Penjamin --</item>
+        <item>BPJS</item>
+        <item>Asuransi</item>
+        <item>UMUM</item>
+    </string-array>
+
+    <string-array name="jenis_periksa">
+        <item>-- Pilih Jenis Periksa --</item>
+        <item>Poli</item>
+        <item>Dokter</item>
+    </string-array>
 </resources>

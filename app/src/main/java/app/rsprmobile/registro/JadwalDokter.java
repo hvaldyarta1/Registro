@@ -38,7 +38,7 @@ public class JadwalDokter extends Fragment {
 
     ListView listJadwal;
     AdapterJadwal adapterJadwal;
-    public static final String urlJadwal = Server.URL + "jadwaldokter-v04-0.0.1/Jadwal/JadwalDokterDenganIdDokter/";
+    public static final String urlJadwal = "http://192.168.11.213:8080/jadwaldokter-v04-0.0.1/Jadwal/JadwalDokterDenganIdDokter/";
     List<DataJadwal> itemJadwal = new ArrayList<DataJadwal>();
 
     private static final String TAG = MainActivity.class.getSimpleName();

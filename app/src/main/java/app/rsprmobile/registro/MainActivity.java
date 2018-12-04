@@ -1,6 +1,7 @@
 package app.rsprmobile.registro;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -18,15 +19,22 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         Poli.OnFragmentInteractionListener,
         Dokter.OnFragmentInteractionListener,
         Histori.OnFragmentInteractionListener,
-        Pendaftaran.OnFragmentInteractionListener {
+        Pendaftaran.OnFragmentInteractionListener,
+        PeringatanLogin.OnFragmentInteractionListener {
 
     SharedPreferences sharedPreferences;
+
+    private Bundle bundleMain;
+
+    NavigationView navigationView;
 
     public final static String tagIdPasien = "idPasien";
     public final static String tagNoIdentitas = "noIdentitas";
@@ -56,13 +64,49 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        Pendaftaran pendaftaran = new Pendaftaran();
-        fragmentTransaction.replace(R.id.fragment_container, pendaftaran)
-                .commit();
-
         sharedPreferences = getSharedPreferences(Login.my_shared_preferences, Context.MODE_PRIVATE);
         timer.start();
+
+        String noBpjs = getIntent().getStringExtra("noBpjs");
+        String noRm = getIntent().getStringExtra("noRm");
+        String tglLahir = getIntent().getStringExtra("tglLahir");
+        String nama = getIntent().getStringExtra("nama");
+
+        bundleMain = new Bundle();
+        bundleMain.putString("noBpjs", noBpjs);
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        View headerView = navigationView.getHeaderView(0);
+        TextView navUsername = (TextView) headerView.findViewById(R.id.textNamaPasien);
+        TextView navRM = (TextView) headerView.findViewById(R.id.textViewRM);
+
+        if (sharedPreferences.getString("nama", null) != null){
+            navUsername.setText(sharedPreferences.getString("nama", null));
+            navRM.setText(sharedPreferences.getString("noRm", null));
+        } else {
+           navUsername.setText("Nama Pasien");
+           navRM.setText("no. RM");
+        }
+
+        bundleMain = new Bundle();
+        bundleMain.putString("noRm", noRm);
+        bundleMain.putString("noBpjs", noBpjs);
+        bundleMain.putString("tglLahir", tglLahir);
+        bundleMain.putString("nama", nama);
+
+        if (sharedPreferences.getString("noRm", null) != null){
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            Pendaftaran pendaftaran = new Pendaftaran();
+            fragmentTransaction.replace(R.id.fragment_container, pendaftaran)
+                    .commit();
+        } else {
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            Dokter dokter = new Dokter();
+            hideItem();
+            fragmentTransaction.replace(R.id.fragment_container, dokter)
+                    .commit();
+        }
+
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -79,8 +123,14 @@ public class MainActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+    }
+
+    private void hideItem()
+    {
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        Menu nav_Menu = navigationView.getMenu();
+        nav_Menu.findItem(R.id.nav_share).setVisible(false);
     }
 
     @Override
@@ -123,10 +173,14 @@ public class MainActivity extends AppCompatActivity
         Fragment fragment = null;
         Class fragmentClass = null;
 
-
         if (id == R.id.nav_daftar) {
             // Handle the camera action
-            fragmentClass = Pendaftaran.class;
+            if (sharedPreferences.getString("noRm", null) != null){
+                fragmentClass = Pendaftaran.class;
+            } else {
+                fragmentClass = PeringatanLogin.class;
+            }
+
         } else if (id == R.id.nav_dokter) {
             fragmentClass = Dokter.class;
         } else if (id == R.id.nav_poli) {
@@ -137,13 +191,13 @@ public class MainActivity extends AppCompatActivity
 
         } try {
             fragment = (Fragment) fragmentClass.newInstance();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
+        } catch (IllegalAccessException | InstantiationException e) {
             e.printStackTrace();
         }
 
         FragmentManager fragmentManager = getSupportFragmentManager();
+        assert fragment != null;
+        fragment.setArguments(bundleMain);
         fragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, fragment)
                 .addToBackStack(null)
@@ -183,9 +237,13 @@ public class MainActivity extends AppCompatActivity
             editor.putString(tagUmur, null);
             editor.putString(tagNoIdentitas, null);
             editor.putString(tagStatusPasien, null);
+            editor.putString(tagTanggalLahir, null);
             editor.apply();
-
+            Intent intentLogin = new Intent(MainActivity.this, Login.class);
+            startActivity(intentLogin);
             finish();
+            Toast.makeText(getApplicationContext(), "Sesi habis, silakan login kembali", Toast.LENGTH_LONG).show();
+
         }
     };
 
@@ -196,5 +254,11 @@ public class MainActivity extends AppCompatActivity
         timer.cancel();
     }*/
 
+    /*@Override
+    protected void onResume(){
+        super.onResume();
+
+        timer.start();
+    }*/
 
 }

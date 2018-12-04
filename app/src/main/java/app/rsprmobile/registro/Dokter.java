@@ -40,7 +40,7 @@ public class Dokter extends Fragment {
     ProgressDialog progressDialog;
     AdapterGridDokter adapterGridDokter;
 
-    public static final String urlDokter = Server.URL + "jadwaldokter-v04-0.0.1/Jadwal/DataSemuaDokter";
+    public static final String urlDokter = "http://192.168.11.213:8080/jadwaldokter-v04-0.0.1/Jadwal/DataSemuaDokter";
     List<DataDokter> itemdokter = new ArrayList<DataDokter>();
     RecyclerView rvDokter;
 

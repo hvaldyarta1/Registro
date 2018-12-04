@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
@@ -20,7 +21,7 @@
         android:layout_height="30dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:background="@drawable/ruang"
+        android:background="@drawable/hari"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/iconNamaKlinik" />
 
@@ -38,7 +39,7 @@
         android:id="@+id/iconKuota"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="20dp"
         android:layout_marginTop="16dp"
         android:background="@drawable/kuota"
         app:layout_constraintStart_toStartOf="parent"
@@ -48,9 +49,9 @@
         android:id="@+id/iconHari"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="20dp"
         android:layout_marginTop="16dp"
-        android:background="@drawable/hari"
+        android:background="@drawable/ruang"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/iconKuota" />
 
@@ -68,22 +69,22 @@
     <TextView
         android:id="@+id/txtRuangPeriksa"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="24dp"
+        android:layout_height="15dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="32dp"
         android:text="@string/ruang_periksa_jadwal"
-        app:layout_constraintStart_toEndOf="@+id/iconRuangPeriksa"
-        app:layout_constraintTop_toBottomOf="@+id/txtNamaKlinik" />
+        app:layout_constraintStart_toEndOf="@+id/iconHari"
+        app:layout_constraintTop_toBottomOf="@+id/txtKuotaPasien" />
 
     <TextView
         android:id="@+id/txtJamAwal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="28dp"
         android:text="@string/jam_awal_jadwal"
         app:layout_constraintStart_toEndOf="@+id/iconJam"
-        app:layout_constraintTop_toBottomOf="@+id/txtRuangPeriksa" />
+        app:layout_constraintTop_toBottomOf="@+id/txtHariPraktek" />
 
     <TextView
         android:id="@+id/txtJamAkhir"
@@ -98,8 +99,8 @@
         android:id="@+id/txtKuotaPasien"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="26dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="24dp"
         android:text="@string/kuota_perjam_jadwal"
         app:layout_constraintStart_toEndOf="@+id/iconKuota"
         app:layout_constraintTop_toBottomOf="@+id/txtJamAkhir" />
@@ -108,10 +109,10 @@
         android:id="@+id/txtHariPraktek"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="26dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
         android:text="@string/hari_praktek_jadwal"
-        app:layout_constraintStart_toEndOf="@+id/iconHari"
-        app:layout_constraintTop_toBottomOf="@+id/txtKuotaPasien" />
+        app:layout_constraintStart_toEndOf="@+id/iconRuangPeriksa"
+        app:layout_constraintTop_toBottomOf="@+id/txtNamaKlinik" />
 
 </android.support.constraint.ConstraintLayout>

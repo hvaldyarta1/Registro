@@ -1,13 +1,14 @@
 package app.rsprmobile.registro.data;
 
 public class DataJadwal {
-    private String klinik_id, kuotaPasienPerjam, namaKlinik, jamAwal, jamAkhir, ruangPeriksa,
-            hariPraktek;
+    private String klinik_id, namaKlinik, jamAwal, jamAkhir, ruangPeriksa,
+            hariPraktek, kuotaPasienPerjam, kuotaPasien;
 
-    public DataJadwal(String klinik_id, String kuotaPasienPerjam, String namaKlinik,
+    public DataJadwal(String klinik_id, String kuotaPasienPerjam, String kuotaPasien, String namaKlinik,
                       String jamAwal, String jamAkhir, String ruangPeriksa, String hariPraktek){
         this.klinik_id = klinik_id;
         this.kuotaPasienPerjam = kuotaPasienPerjam;
+        this.kuotaPasien = kuotaPasien;
         this.namaKlinik = namaKlinik;
         this.jamAwal = jamAwal;
         this.jamAkhir = jamAkhir;
@@ -19,20 +20,28 @@ public class DataJadwal {
 
     }
 
-    public String getKlinik_id() {
-        return klinik_id;
-    }
-
-    public void setKlinik_id(String klinik_id) {
-        this.klinik_id = klinik_id;
-    }
-
     public String getKuotaPasienPerjam() {
         return kuotaPasienPerjam;
     }
 
     public void setKuotaPasienPerjam(String kuotaPasienPerjam) {
         this.kuotaPasienPerjam = kuotaPasienPerjam;
+    }
+
+    public String getKuotaPasien() {
+        return kuotaPasien;
+    }
+
+    public void setKuotaPasien(String kuotaPasien) {
+        this.kuotaPasien = kuotaPasien;
+    }
+
+    public String getKlinik_id() {
+        return klinik_id;
+    }
+
+    public void setKlinik_id(String klinik_id) {
+        this.klinik_id = klinik_id;
     }
 
     public String getNamaKlinik() {
