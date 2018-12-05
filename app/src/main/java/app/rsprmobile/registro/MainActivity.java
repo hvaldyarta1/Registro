@@ -216,49 +216,52 @@ public class MainActivity extends AppCompatActivity
 
         @Override
         public void onFinish() {
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putBoolean(Login.session_status, false);
-            editor.putString(tagIdPasien, null);
-            editor.putString(tagNama, null);
-            editor.putString(tagJenisIdentitas, null);
-            editor.putString(tagNoHP1, null);
-            editor.putString(tagNoBpjs,null);
-            editor.putString(tagKelamin, null);
-            editor.putString(tagNoTelp, null);
-            editor.putString(tagGolDarah, null);
-            editor.putString(tagNoKartu, null);
-            editor.putString(tagNoRm, null);
-            editor.putString(tagStatusBpjs, null);
-            editor.putString(tagTanggalDaftar, null);
-            editor.putString(tagStatus, null);
-            editor.putString(tagAgama, null);
-            editor.putString(tagPekerjaan, null);
-            editor.putString(tagStatusKematian, null);
-            editor.putString(tagUmur, null);
-            editor.putString(tagNoIdentitas, null);
-            editor.putString(tagStatusPasien, null);
-            editor.putString(tagTanggalLahir, null);
-            editor.apply();
-            Intent intentLogin = new Intent(MainActivity.this, Login.class);
-            startActivity(intentLogin);
-            finish();
-            Toast.makeText(getApplicationContext(), "Sesi habis, silakan login kembali", Toast.LENGTH_LONG).show();
+            if (sharedPreferences != null){
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putBoolean(Login.session_status, false);
+                editor.putString(tagIdPasien, null);
+                editor.putString(tagNama, null);
+                editor.putString(tagJenisIdentitas, null);
+                editor.putString(tagNoHP1, null);
+                editor.putString(tagNoBpjs,null);
+                editor.putString(tagKelamin, null);
+                editor.putString(tagNoTelp, null);
+                editor.putString(tagGolDarah, null);
+                editor.putString(tagNoKartu, null);
+                editor.putString(tagNoRm, null);
+                editor.putString(tagStatusBpjs, null);
+                editor.putString(tagTanggalDaftar, null);
+                editor.putString(tagStatus, null);
+                editor.putString(tagAgama, null);
+                editor.putString(tagPekerjaan, null);
+                editor.putString(tagStatusKematian, null);
+                editor.putString(tagUmur, null);
+                editor.putString(tagNoIdentitas, null);
+                editor.putString(tagStatusPasien, null);
+                editor.putString(tagTanggalLahir, null);
+                editor.apply();
+
+                Intent intentLogin = new Intent(MainActivity.this, Login.class);
+                startActivity(intentLogin);
+                finish();
+                Toast.makeText(getApplicationContext(), "Sesi habis, silakan login kembali", Toast.LENGTH_LONG).show();
+            }
 
         }
     };
 
-    /*@Override
+    @Override
     public void onUserInteraction() {
         super.onUserInteraction();
 
         timer.cancel();
-    }*/
+    }
 
-    /*@Override
-    protected void onResume(){
-        super.onResume();
+    @Override
+    protected void onStop() {
+        super.onStop();
 
         timer.start();
-    }*/
+    }
 
 }

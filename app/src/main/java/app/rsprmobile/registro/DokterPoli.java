@@ -97,23 +97,6 @@ public class DokterPoli extends Fragment {
             }
         });
 
-
-
-        /*listDokterPoli.setOnClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String dokterId = itemDokterPoli.get(position).getIdDokterTetap();
-
-                JadwalDokterPoli jadwalDokterPoli = new JadwalDokterPoli();
-                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
-                        fragmentTransaction.replace(R.id.fragment_container, jadwalDokterPoli)
-                        .addToBackStack(null)
-                        .commit();
-
-            }
-        });*/
         dokterPoli(idKlinik);
 
     return viewDokterPoli;

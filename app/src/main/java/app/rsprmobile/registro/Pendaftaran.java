@@ -43,6 +43,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
+import app.rsprmobile.registro.adapter.AdapterGridNomor;
 import app.rsprmobile.registro.adapter.AdapterJadwal;
 import app.rsprmobile.registro.adapter.AdapterJadwalPoli;
 import app.rsprmobile.registro.adapter.AdapterSinnerSemuaDokter;
@@ -55,6 +56,8 @@ import app.rsprmobile.registro.data.DataDokterPoli;
 import app.rsprmobile.registro.data.DataJadwal;
 import app.rsprmobile.registro.data.DataJadwalPoli;
 import app.rsprmobile.registro.data.DataJamPraktek;
+import app.rsprmobile.registro.data.DataKlinik;
+import app.rsprmobile.registro.data.DataNomor;
 import app.rsprmobile.registro.data.DataPoli;
 
 import static app.rsprmobile.registro.Dokter.urlDokter;
@@ -83,15 +86,18 @@ public class Pendaftaran extends Fragment {
     AdapterJadwal adapterJadwal;
     AdapterJadwalPoli adapterJadwalPoli;
     AdapterSpinnerJamPraktek adapterSpinnerJamPraktek;
+    AdapterGridNomor adapterGridNomor;
     List<DataDokter> semuaDokter = new ArrayList<DataDokter>();
     List<DataDokterPoli> dokterPoli = new ArrayList<DataDokterPoli>();
     List<DataPoli> poli = new ArrayList<DataPoli>();
     List<DataJadwal> jadwalSemuaDokter = new ArrayList<DataJadwal>();
     List<DataJadwalPoli> jadwalDokterPoli = new ArrayList<DataJadwalPoli>();
     List<DataJamPraktek> itemJamPraktek = new ArrayList<DataJamPraktek>();
+    List<DataKlinik> dataKlinik = new ArrayList<DataKlinik>();
 
     public final String urlJamPraktek = "http://192.168.11.213:8080/jadwaldokter-v04-0.0.1/Jadwal/JadwalDokterDenganidKlinikidDokteridTanggal/";
     public final String urlJamPraktekDokter = "http://192.168.11.213:8080/jadwaldokter-v04-0.0.1/Jadwal/JadwalDokterDenganTanggalDokter/";
+    public final String urlKlinik = "http://192.168.11.213:8080/jadwaldokter-v04-0.0.1/Jadwal/JadwalDokterDenganIdKlinikIdDokterIdTanggalWaktuAwal/{tanggalJadwal}/and/{idDokter}/and/{idKlinik}/and/{waktuAwal}";
 
     ListView listJadwalDokter;
 
@@ -101,9 +107,14 @@ public class Pendaftaran extends Fragment {
 
     SharedPreferences sharedPreferences;
     String jaminan, iddokter, klinikid, tgl;
-    int kuotapasien, kuotaperjam;
+    String kuotapasien, kuotaperjam, jamAwal;
 
     private static final String TAG = MainActivity.class.getSimpleName();
+
+    private static final int[] idArray = {R.id.btn1, R.id.btn2, R.id.btn3, R.id.btn4, R.id.btn4, R.id.btn5, R.id.btn6, R.id.btn7, R.id.btn8, R.id.btn10};
+    private Button[] button = new Button[idArray.length];
+
+    int i;
 
     public Pendaftaran() {
         // Required empty public constructor
@@ -116,6 +127,8 @@ public class Pendaftaran extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View viewPendaftaran = inflater.inflate(R.layout.fragment_pendaftaran, container, false);
+
+        button[i] = (Button) viewPendaftaran.findViewById(idArray[i]);
 
         spinnerPenjamin = (Spinner) viewPendaftaran.findViewById(R.id.spinnerJaminan);
         final ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(Objects.requireNonNull(getActivity()), R.array.penjamin, android.R.layout.simple_spinner_item);
@@ -151,7 +164,7 @@ public class Pendaftaran extends Fragment {
         adapterJadwalPoli = new AdapterJadwalPoli(getActivity(), jadwalDokterPoli);
 
         sharedPreferences = this.getActivity().getSharedPreferences(Login.my_shared_preferences, Context.MODE_PRIVATE);
-
+        
         spinnerPenjamin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -240,8 +253,6 @@ public class Pendaftaran extends Fragment {
                 if (spinnerDokter.getAdapter() == adapterSpinnerDokter){ //Dokter Poli
                     String dokter = dokterPoli.get(position).getNamaDokterTetap();
                     iddokter = dokterPoli.get(position).getIdDokterTetap();
-                    /*kuotapasien = jadwalDokterPoli.get(position).getKuotaPasien();*/
-                    /*kuotaperjam = jadwalDokterPoli.get(position).getKuotaPerJam();*/
                     textNamaDokter.setText(dokter);
                     dataJadwalDokterPoli(iddokter, klinikid);
                     listJadwalDokter.setVisibility(View.VISIBLE);
@@ -253,7 +264,6 @@ public class Pendaftaran extends Fragment {
                     iddokter = semuaDokter.get(position).getDokterId();
                     textNamaDokter.setText(dokter);
                     jadwalDokter(iddokter);
-                    /*kuotapasien = jadwalSemuaDokter.get(position).getKuotaPasien();*/
                     listJadwalDokter.setVisibility(View.VISIBLE);
                     listJadwalDokter.setAdapter(adapterJadwal);
                     btnTanggal.setEnabled(true);
@@ -267,6 +277,34 @@ public class Pendaftaran extends Fragment {
 
             }
         });
+
+        spinnerJamPraktek.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                int mKuotaPasien = 5;/*Integer.parseInt(kuotapasien);*/
+                for (i = 0; i<mKuotaPasien; i++){
+                    button[i].setVisibility(View.VISIBLE);
+
+                    button[i].setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                            switch (v.getId()){
+                                case R.id.btn1:
+                                    Toast.makeText(getActivity(), "1", Toast.LENGTH_SHORT).show();
+
+                            }
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
 
         //-----DatePicker
         dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
@@ -282,7 +320,53 @@ public class Pendaftaran extends Fragment {
         });
         //---------------
 
+        spinnerJamPraktek.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                jamAwal = itemJamPraktek.get(position).getJamAwal();
+
+                dataKlinik(tgl, iddokter, klinikid, jamAwal);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
     return viewPendaftaran;
+    }
+
+    private void dataKlinik(String tanggalJadwal, String idDokter, String idKlinik, String waktuAwal){
+        dataKlinik.clear();
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(urlKlinik + tanggalJadwal + "/and/" + idDokter + "/and/"
+                + idKlinik + "/and/" + waktuAwal, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                Log.d(TAG, response.toString());
+
+                for (i = 0; i < response.length(); i++) {
+                    try {
+                        JSONObject jsonObject = response.getJSONObject(i);
+                        JSONObject object = jsonObject.getJSONObject("klinikDokter");
+
+                        DataKlinik dataKlinik = new DataKlinik();
+
+                        dataKlinik.setNamaKlinik(jsonObject.getString("namaKlinik"));
+                        dataKlinik.setIdKlinikDokter(object.getString("idKlinikDokter"));
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.e(TAG, "Error: " + error.getMessage());
+            }
+        });
+        AppController.getInstance().addToRequestQueue(jsonArrayRequest);
     }
 
     private void dataPoli(){
@@ -490,8 +574,8 @@ public class Pendaftaran extends Fragment {
                         dataJadwalPoli.setJamAwal(jsonObject.getString("jamAwal"));
                         dataJadwalPoli.setJamAkhir(jsonObject.getString("jamAkhir"));
                         dataJadwalPoli.setHariPraktek(jsonObject.getString("hariPraktek"));
-                        dataJadwalPoli.setKuotaPasien(jsonObject.getString("kuotaPasien"));
-                        dataJadwalPoli.setKuotaPerJam(jsonObject.getString("kuotaPerJam"));
+                        /*dataJadwalPoli.setKuotaPasien(jsonObject.getString("kuotaPasien"));
+                        dataJadwalPoli.setKuotaPerJam(jsonObject.getString("kuotaPerJam"))*/;
                         jadwalDokterPoli.add(dataJadwalPoli);
                     } catch (JSONException e){
                         e.printStackTrace();
