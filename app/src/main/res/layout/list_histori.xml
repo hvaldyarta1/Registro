@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="8dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/cardViewHistori"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_margin="5dp"
+        android:layout_marginTop="8dp"
+        app:cardCornerRadius="5dp"
+        app:cardElevation="8dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/txtNomorAntrian"
+                android:layout_width="95dp"
+                android:layout_height="110dp"
+                android:layout_below="@+id/textNomorUrut"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="17dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="10dp"
+                android:background="#007df1"
+                android:gravity="center"
+                android:text="1"
+                android:textColor="#ffffff"
+                android:textSize="42sp" />
+
+            <TextView
+                android:id="@+id/txtPoli"
+                android:layout_width="98dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="29dp"
+                android:layout_toEndOf="@+id/txtNomorAntrian"
+                android:text="Poli" />
+
+            <TextView
+                android:id="@+id/textNomorUrut"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="17dp"
+                android:layout_marginTop="6dp"
+                android:text="No. Urut" />
+
+            <TextView
+                android:id="@+id/textDokter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/txtPoli"
+                android:layout_alignStart="@+id/txtPoli"
+                android:layout_marginStart="-1dp"
+                android:layout_marginTop="8dp"
+                android:text="Dokter" />
+
+            <TextView
+                android:id="@+id/textJamPelayanan"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textDokter"
+                android:layout_alignStart="@+id/textDokter"
+                android:layout_marginStart="0dp"
+                android:layout_marginTop="7dp"
+                android:text="Jam Pelayanan" />
+
+            <TextView
+                android:id="@+id/textRuang"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textJamPelayanan"
+                android:layout_alignStart="@+id/textJamPelayanan"
+                android:layout_alignParentBottom="true"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="21dp"
+                android:text="Ruang" />
+
+
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
+
+</android.support.constraint.ConstraintLayout>

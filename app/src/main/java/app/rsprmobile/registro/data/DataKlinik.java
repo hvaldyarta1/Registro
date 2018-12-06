@@ -1,7 +1,7 @@
 package app.rsprmobile.registro.data;
 
 public class DataKlinik {
-    String namaKlinik, klinikDokter, idKlinikDokter, dokterId, hariPraktek,
+    private String namaKlinik, klinikDokter, idKlinikDokter, dokterId, hariPraktek,
     jamAwal, jamAkhir, klinikId, kuotaPasien, kuotaPerjam, waktuJadwal,
     keteranganJadwal, ruangTetap, statusPasien, tracerTetap;
 

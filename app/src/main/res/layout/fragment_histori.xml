@@ -5,10 +5,19 @@
     android:layout_height="match_parent"
     tools:context=".Histori">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <ListView
+        android:id="@+id/listHistori"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Fragment Histori" />
+        android:layout_margin="6dp" />
+
+    <!--<android.support.v7.widget.RecyclerView
+        android:id="@+id/rvHistori"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp" />-->
 
 </FrameLayout>
