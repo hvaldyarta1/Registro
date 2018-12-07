@@ -6,15 +6,15 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_daftar"
-            android:icon="@color/colorAccent"
+            android:icon="@drawable/daftar"
             android:title="Daftar Periksa" />
         <item
             android:id="@+id/nav_dokter"
-            android:icon="@color/colorPrimary"
+            android:icon="@drawable/stetoskop"
             android:title="Dokter" />
         <item
             android:id="@+id/nav_poli"
-            android:icon="@color/colorPrimaryDark"
+            android:icon="@drawable/navdrawpoli"
             android:title="Poli" />
 
     </group>
@@ -23,7 +23,7 @@
         <menu>
             <item
                 android:id="@+id/nav_share"
-                android:icon="@color/design_default_color_primary_dark"
+                android:icon="@drawable/histori"
                 android:title="Histori" />
             <item
                 android:id="@+id/nav_send"

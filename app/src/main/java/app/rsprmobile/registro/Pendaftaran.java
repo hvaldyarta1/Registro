@@ -387,7 +387,9 @@ public class Pendaftaran extends Fragment {
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
+                    adapterDataKlinik.notifyDataSetChanged();
                     progressDialog.dismiss();
+
                 }
             }
         }, new Response.ErrorListener() {
