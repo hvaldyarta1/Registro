@@ -109,6 +109,7 @@ public class Histori extends Fragment {
                         dataHistori.setDokterJadwal(jsonObject.getString("dokterJadwal"));
                         dataHistori.setNoAntrean(object.getString("noAntrian"));
                         dataHistori.setWaktuCheckin(object.getString("waktuCheckin"));
+                        dataHistori.setRuang(jsonObject.getString("noRuang"));
 
                         itemHistori.add(dataHistori);
                     } catch (JSONException e) {

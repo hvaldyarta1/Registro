@@ -10,6 +10,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -40,6 +42,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
+import app.rsprmobile.registro.adapter.AdapterDataKlinik;
 import app.rsprmobile.registro.adapter.AdapterJadwal;
 import app.rsprmobile.registro.adapter.AdapterJadwalPoli;
 import app.rsprmobile.registro.adapter.AdapterSinnerSemuaDokter;
@@ -83,6 +86,7 @@ public class Pendaftaran extends Fragment {
     AdapterJadwal adapterJadwal;
     AdapterJadwalPoli adapterJadwalPoli;
     AdapterSpinnerJamPraktek adapterSpinnerJamPraktek;
+    AdapterDataKlinik adapterDataKlinik;
     List<DataDokter> semuaDokter = new ArrayList<DataDokter>();
     List<DataDokterPoli> dokterPoli = new ArrayList<DataDokterPoli>();
     List<DataPoli> poli = new ArrayList<DataPoli>();
@@ -95,7 +99,7 @@ public class Pendaftaran extends Fragment {
     public final String urlJamPraktekDokter = "http://192.168.11.213:8080/jadwaldokter-v04-0.0.1/Jadwal/JadwalDokterDenganTanggalDokter/";
     public final String urlKlinik = "http://192.168.11.213:8080/jadwaldokter-v04-0.0.1/Jadwal/JadwalDokterDenganIdKlinikIdDokterIdTanggalWaktuAwal/";
 
-    ListView listJadwalDokter;
+    ListView listJadwalDokter, listButton;
 
     TextView textNamaDokter;
 
@@ -103,16 +107,19 @@ public class Pendaftaran extends Fragment {
 
     SharedPreferences sharedPreferences;
     String jaminan, iddokter, klinikid, tgl;
-    String kuotapasien, kuotaperjam, jamAwal;
+    String jamAwal;
+
+    RecyclerView rvButtonNomor;
+
+    /*private static final int[] idArray = {R.id.btn1, R.id.btn2, R.id.btn3, R.id.btn4, R.id.btn5,
+            R.id.btn6, R.id.btn7, R.id.btn8, R.id.btn9, R.id.btn10, R.id.btn11, R.id.btn12, R.id.btn13, R.id.btn14, R.id.btn15,
+            R.id.btn16, R.id.btn17, R.id.btn18, R.id.btn19, R.id.btn20, R.id.btn21, R.id.btn22, R.id.btn23, R.id.btn24, R.id.btn25};
+    private Button[] button = new Button[idArray.length];*/
+
+    private int i, kuotapasien, kuotaperjam;
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
-    private static final int[] idArray = {R.id.btn1, R.id.btn2, R.id.btn3, R.id.btn4, R.id.btn5,
-            R.id.btn6, R.id.btn7, R.id.btn8, R.id.btn9, R.id.btn10, R.id.btn11, R.id.btn12, R.id.btn13, R.id.btn14, R.id.btn15,
-            R.id.btn16, R.id.btn17, R.id.btn18, R.id.btn19, R.id.btn20, R.id.btn21, R.id.btn22, R.id.btn23, R.id.btn24, R.id.btn25};
-    private Button[] button = new Button[idArray.length];
-
-    int i;
 
     public Pendaftaran() {
         // Required empty public constructor
@@ -125,6 +132,16 @@ public class Pendaftaran extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         final View viewPendaftaran = inflater.inflate(R.layout.fragment_pendaftaran, container, false);
+        /*button[i] = (Button) viewPendaftaran.findViewById(idArray[i]);*/
+
+        /*listButton = (ListView) viewPendaftaran.findViewById(R.id.listButton);
+        adapterDataKlinik = new AdapterDataKlinik(getActivity(), itemDataKlinik);*/
+
+        rvButtonNomor = (RecyclerView) viewPendaftaran.findViewById(R.id.rvButton);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
+        rvButtonNomor.setLayoutManager(mLayoutManager);
+
+        /*mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);*/
 
         spinnerPenjamin = (Spinner) viewPendaftaran.findViewById(R.id.spinnerJaminan);
         final ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(Objects.requireNonNull(getActivity()), R.array.penjamin, android.R.layout.simple_spinner_item);
@@ -278,12 +295,12 @@ public class Pendaftaran extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 jamAwal = itemJamPraktek.get(position).getJamAwal();
-                /*"2018-12-05/and/1/and/27/and/09:00"*/
-                /*String namaklinik = itemDataKlinik.get(position).getNamaKlinik();
+                newDataKlinik("2018-12-05", "1", "27", "09:00");
 
-                Toast.makeText(getContext(), namaklinik, Toast.LENGTH_LONG).show();*/
-                for (i = 0; i<20; i++){
-                    button[i] = (Button) viewPendaftaran.findViewById(idArray[i]);
+                adapterDataKlinik = new AdapterDataKlinik(getContext(), itemDataKlinik);
+                rvButtonNomor.setAdapter(adapterDataKlinik);
+
+                /*for (i = 0; i<20; i++){
                     button[i].setVisibility(View.VISIBLE);
 
                     button[i].setOnClickListener(new View.OnClickListener() {
@@ -297,7 +314,16 @@ public class Pendaftaran extends Fragment {
                             }
                         }
                     });
-                }
+                }*/
+                /*listButton.setAdapter(adapterDataKlinik);*/
+
+                /*adapterDataKlinik = new AdapterDataKlinik(getContext(), itemDataKlinik);
+                rvButtonNomor.setAdapter(adapterDataKlinik);*/
+
+                /*"2018-12-05/and/1/and/27/and/09:00"*/
+                /*String namaklinik = itemDataKlinik.get(position).getNamaKlinik();
+
+                Toast.makeText(getContext(), namaklinik, Toast.LENGTH_LONG).show();*/
             }
 
             @Override
@@ -305,9 +331,6 @@ public class Pendaftaran extends Fragment {
 
             }
         });
-
-        newDatakllinik("2018-12-05", "1", "27", "09:00");
-        mKuotaPasien = Integer.parseInt(kuotapasien);
 
         //-----DatePicker
         dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
@@ -326,7 +349,7 @@ public class Pendaftaran extends Fragment {
     return viewPendaftaran;
     }
 
-    private void newDatakllinik(String tanggalJadwal, String idDokter, String idKlinik, String waktuAwal){
+    private void newDataKlinik(String tanggalJadwal, String idDokter, String idKlinik, String waktuAwal){
         itemDataKlinik.clear();
         progressDialog = new ProgressDialog(getActivity());
         progressDialog.setCancelable(false);
@@ -359,8 +382,6 @@ public class Pendaftaran extends Fragment {
                         dataKlinik.setRuangTetap(object.getString("ruangTetap"));
                         dataKlinik.setStatusPasien(object.getString("statusPasien"));
                         dataKlinik.setTracerTetap(object.getString("tracerTetap"));
-
-                        kuotapasien = jsonObject.getString("kuotaPasien");
 
                         itemDataKlinik.add(dataKlinik);
                     } catch (JSONException e) {

@@ -245,6 +245,10 @@ public class MainActivity extends AppCompatActivity
                 startActivity(intentLogin);
                 finish();
                 Toast.makeText(getApplicationContext(), "Sesi habis, silakan login kembali", Toast.LENGTH_LONG).show();
+            } else if (sharedPreferences == null){
+                Intent intentLogin = new Intent(MainActivity.this, Login.class);
+                startActivity(intentLogin);
+                finish();
             }
 
         }

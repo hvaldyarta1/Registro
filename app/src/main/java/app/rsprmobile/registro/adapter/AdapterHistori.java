@@ -66,6 +66,7 @@ public class AdapterHistori extends BaseAdapter {
         txtNamaKlinik.setText(dataHistori.getNamaKlinik());
         txtDokter.setText(dataHistori.getDokterJadwal());
         txtJam.setText(dataHistori.getWaktuCheckin());
+        txtRuang.setText(dataHistori.getRuang());
 
         return convertView;
     }
