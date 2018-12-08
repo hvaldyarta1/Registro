@@ -1,18 +1,27 @@
 package app.rsprmobile.registro.data;
 
 public class DataHistori {
-    private String noAntrean, namaKlinik, dokterJadwal, waktuCheckin, ruang;
+    private String noAntrean, namaKlinik, dokterJadwal, waktuCheckin, ruang, jamAkhir;
 
-    public DataHistori(String noAntrean, String namaKlinik, String dokterJadwal, String waktuCheckin, String ruang){
+    public DataHistori(String noAntrean, String namaKlinik, String dokterJadwal, String waktuCheckin, String ruang, String jamAkhir){
         this.noAntrean = noAntrean;
         this.namaKlinik = namaKlinik;
         this.dokterJadwal = dokterJadwal;
         this.waktuCheckin = waktuCheckin;
         this.ruang = ruang;
+        this.jamAkhir = jamAkhir;
     }
 
     public DataHistori() {
 
+    }
+
+    public String getJamAkhir() {
+        return jamAkhir;
+    }
+
+    public void setJamAkhir(String jamAkhir) {
+        this.jamAkhir = jamAkhir;
     }
 
     public String getNoAntrean() {

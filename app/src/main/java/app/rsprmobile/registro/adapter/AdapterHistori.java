@@ -63,10 +63,16 @@ public class AdapterHistori extends BaseAdapter {
         DataHistori dataHistori = itemHistori.get(position);
 
         txtNoAntrean.setText(dataHistori.getNoAntrean());
-        txtNamaKlinik.setText(dataHistori.getNamaKlinik());
-        txtDokter.setText(dataHistori.getDokterJadwal());
-        txtJam.setText(dataHistori.getWaktuCheckin());
-        txtRuang.setText(dataHistori.getRuang());
+        txtNamaKlinik.setText("Poli: " + dataHistori.getNamaKlinik());
+        txtDokter.setText("Dokter: " + dataHistori.getDokterJadwal());
+
+        String jamAwal = dataHistori.getWaktuCheckin();
+        String splitWaktuChekin[] = jamAwal.split("\\:");
+        String jam1 = splitWaktuChekin[0];
+        String jam2 = splitWaktuChekin[1];
+        txtJam.setText("Dilayani pukul: " + jam1 + ":" + jam2 + " - " + dataHistori.getJamAkhir());
+
+        txtRuang.setText("Ruang: " + dataHistori.getRuang());
 
         return convertView;
     }

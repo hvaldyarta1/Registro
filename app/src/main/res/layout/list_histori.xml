@@ -37,7 +37,7 @@
 
             <TextView
                 android:id="@+id/txtPoli"
-                android:layout_width="98dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:layout_marginStart="16dp"
@@ -71,8 +71,8 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/textDokter"
                 android:layout_alignStart="@+id/textDokter"
-                android:layout_marginStart="0dp"
-                android:layout_marginTop="7dp"
+                android:layout_marginStart="1dp"
+                android:layout_marginTop="8dp"
                 android:text="Jam Pelayanan" />
 
             <TextView
@@ -82,8 +82,9 @@
                 android:layout_below="@+id/textJamPelayanan"
                 android:layout_alignStart="@+id/textJamPelayanan"
                 android:layout_alignParentBottom="true"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="21dp"
+                android:layout_marginStart="0dp"
+                android:layout_marginTop="7dp"
+                android:layout_marginBottom="10dp"
                 android:text="Ruang" />
 
 

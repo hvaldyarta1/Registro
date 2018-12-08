@@ -169,11 +169,12 @@
 
         <Spinner
             android:id="@+id/spinnerJamPraktek"
-            android:layout_width="237dp"
-            android:layout_height="wrap_content"
+            android:layout_width="277dp"
+            android:layout_height="18dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
+            android:text="-- Pilih Jam Praktek--"
             android:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
@@ -193,7 +194,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/spinnerJamPraktek" />-->
 
-        <android.support.v7.widget.RecyclerView
+        <!--<android.support.v7.widget.RecyclerView
             android:id="@+id/rvButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -204,7 +205,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/spinnerJamPraktek" />
+            app:layout_constraintTop_toBottomOf="@+id/spinnerJamPraktek" />-->
 
         <TextView
             android:id="@+id/textView"
@@ -212,12 +213,12 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="36dp"
-            android:text="Pilih Jam Praktek"
+            android:text="Jam Praktek"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/imageView2" />
 
 
-        <!--<LinearLayout
+        <LinearLayout
             android:id="@+id/linearLayout"
             android:layout_width="match_parent"
             android:layout_height="49dp"
@@ -230,49 +231,54 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/spinnerJamPraktek">
 
-            &lt;!&ndash;<android.support.v7.widget.RecyclerView
+            <!--<android.support.v7.widget.RecyclerView
                 android:id="@+id/rvNomor"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
-                android:layout_marginBottom="8dp"/>&ndash;&gt;
+                android:layout_marginBottom="8dp"/>-->
 
             <Button
                 android:id="@+id/btn1"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:visibility="gone"
-                android:text="1" />
+                android:background="#3498DB"
+                 />
 
             <Button
                 android:id="@+id/btn2"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:visibility="gone"
-                android:text="2" />
+                android:background="#3498DB"
+                 />
 
             <Button
                 android:id="@+id/btn3"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:visibility="gone"
-                android:text="3" />
+                android:background="#2ECC71"
+                />
 
             <Button
                 android:id="@+id/btn4"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:visibility="gone"
-                android:text="4" />
+                android:background="#2ECC71"
+                 />
 
             <Button
                 android:id="@+id/btn5"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:visibility="gone"
-                android:text="5" />
+                android:background="#3498DB"
+                 />
 
             <TextView
                 android:id="@+id/teksJam"
@@ -298,49 +304,49 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/linearLayout">
 
-            &lt;!&ndash;<android.support.v7.widget.RecyclerView
+            <!--<android.support.v7.widget.RecyclerView
                 android:id="@+id/rvNomor"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
-                android:layout_marginBottom="8dp"/>&ndash;&gt;
+                android:layout_marginBottom="8dp"/>-->
 
             <Button
                 android:id="@+id/btn6"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:text="6"
-                android:visibility="gone" />
+                android:visibility="gone"
+                android:background="#3498DB"/>
 
             <Button
                 android:id="@+id/btn7"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:text="7"
-                android:visibility="gone" />
+                android:visibility="gone"
+                android:background="#2ECC71"/>
 
             <Button
                 android:id="@+id/btn8"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:text="8"
-                android:visibility="gone" />
+                android:visibility="gone"
+                android:background="#2ECC71"/>
 
             <Button
                 android:id="@+id/btn9"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:text="9"
-                android:visibility="gone" />
+                android:visibility="gone"
+                android:background="#3498DB"/>
 
             <Button
                 android:id="@+id/btn10"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:text="10"
-                android:visibility="gone" />
+                android:visibility="gone"
+                android:background="#3498DB"/>
 
             <TextView
                 android:id="@+id/teksJam1"
@@ -364,49 +370,49 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/linearLayout1">
 
-            &lt;!&ndash;<android.support.v7.widget.RecyclerView
+            <!--<android.support.v7.widget.RecyclerView
                 android:id="@+id/rvNomor"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
-                android:layout_marginBottom="8dp"/>&ndash;&gt;
+                android:layout_marginBottom="8dp"/>-->
 
             <Button
                 android:id="@+id/btn11"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:text="11"
-                android:visibility="gone" />
+                android:visibility="gone"
+                android:background="#2ECC71"/>
 
             <Button
                 android:id="@+id/btn12"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:text="12"
-                android:visibility="gone" />
+                android:visibility="gone"
+                android:background="#2ECC71"/>
 
             <Button
                 android:id="@+id/btn13"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:text="13"
-                android:visibility="gone" />
+                android:visibility="gone"
+                android:background="#3498DB"/>
 
             <Button
                 android:id="@+id/btn14"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:text="14"
-                android:visibility="gone" />
+                android:visibility="gone"
+                android:background="#3498DB"/>
 
             <Button
                 android:id="@+id/btn15"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:text="15"
-                android:visibility="gone" />
+                android:visibility="gone"
+                android:background="#2ECC71"/>
 
             <TextView
                 android:id="@+id/teksJam2"
@@ -430,49 +436,49 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/linearLayout2">
 
-            &lt;!&ndash;<android.support.v7.widget.RecyclerView
+            <!--<android.support.v7.widget.RecyclerView
                 android:id="@+id/rvNomor"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
-                android:layout_marginBottom="8dp"/>&ndash;&gt;
+                android:layout_marginBottom="8dp"/>-->
 
             <Button
                 android:id="@+id/btn16"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:text="16"
-                android:visibility="gone" />
+                android:visibility="gone"
+                android:background="#2ECC71"/>
 
             <Button
                 android:id="@+id/btn17"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:text="17"
-                android:visibility="gone" />
+                android:visibility="gone"
+                android:background="#3498DB"/>
 
             <Button
                 android:id="@+id/btn18"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:text="18"
-                android:visibility="gone" />
+                android:visibility="gone"
+                android:background="#3498DB"/>
 
             <Button
                 android:id="@+id/btn19"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:text="19"
-                android:visibility="gone" />
+                android:visibility="gone"
+                android:background="#2ECC71"/>
 
             <Button
                 android:id="@+id/btn20"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:text="20"
-                android:visibility="gone" />
+                android:visibility="gone"
+                android:background="#2ECC71"/>
 
             <TextView
                 android:id="@+id/teksJam3"
@@ -496,50 +502,49 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/linearLayout3">
 
-            &lt;!&ndash;<android.support.v7.widget.RecyclerView
+            <!--<android.support.v7.widget.RecyclerView
                 android:id="@+id/rvNomor"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
-                android:layout_marginBottom="8dp"/>&ndash;&gt;
+                android:layout_marginBottom="8dp"/>-->
 
             <Button
                 android:id="@+id/btn21"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:text="22"
-                android:textSize="10sp"
-                android:visibility="gone" />
+                android:visibility="gone"
+                android:background="#3498DB"/>
 
             <Button
                 android:id="@+id/btn22"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:text="22"
-                android:visibility="gone" />
+                android:visibility="gone"
+                android:background="#3498DB"/>
 
             <Button
                 android:id="@+id/btn23"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:text="23"
-                android:visibility="gone" />
+                android:visibility="gone"
+                android:background="#2ECC71"/>
 
             <Button
                 android:id="@+id/btn24"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:text="24"
-                android:visibility="gone" />
+                android:visibility="gone"
+                android:background="#2ECC71"/>
 
             <Button
                 android:id="@+id/btn25"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:text="25"
-                android:visibility="gone" />
+                android:visibility="gone"
+                android:background="#3498DB"/>
 
             <TextView
                 android:id="@+id/teksJam4"
@@ -548,7 +553,7 @@
                 android:padding="16dp"
                 android:text="Jam Praktek"
                 android:textAlignment="center" />
-        </LinearLayout>-->
+        </LinearLayout>
 
     </android.support.constraint.ConstraintLayout>
 
