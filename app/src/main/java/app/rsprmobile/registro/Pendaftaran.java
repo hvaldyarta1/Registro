@@ -38,12 +38,13 @@ import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
-import app.rsprmobile.registro.adapter.AdapterDataKlinik;
+/*import app.rsprmobile.registro.adapter.AdapterDataKlinik;*/
 import app.rsprmobile.registro.adapter.AdapterGridDokter;
 import app.rsprmobile.registro.adapter.AdapterJadwal;
 import app.rsprmobile.registro.adapter.AdapterJadwalPoli;
@@ -89,7 +90,7 @@ public class Pendaftaran extends Fragment {
     AdapterJadwal adapterJadwal;
     AdapterJadwalPoli adapterJadwalPoli;
     AdapterSpinnerJamPraktek adapterSpinnerJamPraktek;
-    AdapterDataKlinik adapterDataKlinik;
+    /*AdapterDataKlinik adapterDataKlinik;*/
     List<DataDokter> semuaDokter = new ArrayList<DataDokter>();
     List<DataDokterPoli> dokterPoli = new ArrayList<DataDokterPoli>();
     List<DataPoli> poli = new ArrayList<DataPoli>();
@@ -304,11 +305,21 @@ public class Pendaftaran extends Fragment {
                 rvButtonNomor.setAdapter(adapterDataKlinik);*/
 
 
+
                 for (i = 0; i<20; i++){
                     button[i] = (Button) viewPendaftaran.findViewById(idArray[i]);
                     button[i].setVisibility(View.VISIBLE);
                     button[i].setText(""+(i+1));
+
+                    /*if (button[i].equals(nomorAntrianDipakai)){
+
+                    }*/
+
                     /*button[i].setBackgroundColor(getResources().getColor(R.color.colorAccent));*/
+
+                    /*if (Arrays.asList(button[i].getText().toString()).contains(nomorAntrianDipakai)){
+                        button[i].setBackgroundColor(getResources().getColor(R.color.colorAccent));
+                    }*/
 
                     /*if (button[i].getText().toString().equals()) {
                         button[i].setBackgroundColor(getResources().getColor(R.color.colorAccent));
@@ -470,7 +481,7 @@ public class Pendaftaran extends Fragment {
         progressDialog.setMessage("Memuat Nomor Urut...");
         progressDialog.show();
 
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(urlKlinik + /*"2018-12-05/and/1/and/27/and/09:00"*/tanggalJadwal + "/and/" + idDokter + "/and/"
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(urlKlinik + tanggalJadwal + "/and/" + idDokter + "/and/"
                 + idKlinik + "/and/" + waktuAwal, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
