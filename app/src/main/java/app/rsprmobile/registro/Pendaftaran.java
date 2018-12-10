@@ -5,11 +5,14 @@ import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -22,15 +25,21 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -39,8 +48,11 @@ import org.json.JSONObject;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Objects;
 
 import app.rsprmobile.registro.adapter.AdapterDataKlinik;
@@ -103,6 +115,7 @@ public class Pendaftaran extends Fragment {
     public final String urlJamPraktekDokter = "http://192.168.11.213:8080/jadwaldokter-v04-0.0.1/Jadwal/JadwalDokterDenganTanggalDokter/";
     public final String urlKlinik = "http://192.168.11.213:8080/jadwaldokter-v04-0.0.1/Jadwal/JadwalDokterDenganIdKlinikIdDokterIdTanggalWaktuAwal/";
     public final String urlAntrianDipakai = "http://192.168.11.211:8080/PendaftaranV3/PendaftaranV3/getAntrianByKlinikDokterDanTanggalPeriksa/";
+    public final String urlPendaftaranKunjungan = "http://192.168.29.7:8888/PendaftaranV3/tambahKunjunganBaru";
 
     ListView listJadwalDokter, listButton;
 
@@ -111,7 +124,8 @@ public class Pendaftaran extends Fragment {
     Bundle bundle;
 
     SharedPreferences sharedPreferences;
-    String jaminan, iddokter, klinikid, tgl, jamAwal, idKlinikDokter;
+    String jaminan, iddokter, klinikid, tgl, jamAwal
+            , idKlinikDokter, namaKlinik, noAntrian, statusPasien, tracer, tglDaftar;
 
     RecyclerView rvButtonNomor;
 
@@ -121,6 +135,8 @@ public class Pendaftaran extends Fragment {
     private Button[] button = new Button[idArray.length];
 
     private int i, kuotapasien, kuotaperjam;
+    TextView textViewKuotaPerjam;
+    int txtKuotaPerjam;
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
@@ -132,7 +148,7 @@ public class Pendaftaran extends Fragment {
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(final LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         final View viewPendaftaran = inflater.inflate(R.layout.fragment_pendaftaran, container, false);
@@ -144,6 +160,8 @@ public class Pendaftaran extends Fragment {
         rvButtonNomor.setLayoutManager(new GridLayoutManager(getContext(), 5));*/
 
         /*mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);*/
+
+        textViewKuotaPerjam = (TextView) viewPendaftaran.findViewById(R.id.textViewKuotaPerjam);
 
         spinnerPenjamin = (Spinner) viewPendaftaran.findViewById(R.id.spinnerJaminan);
         final ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(Objects.requireNonNull(getActivity()), R.array.penjamin, android.R.layout.simple_spinner_item);
@@ -240,6 +258,7 @@ public class Pendaftaran extends Fragment {
         spinnerPoli.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                statusPasien = poli.get(position).getNamaKlinik();
 
                 if (spinnerPoli.getSelectedItem() == "--Pilih Klinik--"){
                     spinnerDokter.setVisibility(View.GONE);
@@ -296,18 +315,94 @@ public class Pendaftaran extends Fragment {
         spinnerJamPraktek.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                jamAwal = itemJamPraktek.get(position).getJamAwal();
-                newDataKlinik(/*tgl, iddokter, klinikid, jamAwal*/"2018-12-05","1", "27","09:00");
-                nomorAntrianDipakai("58", "2018-12-05");
 
-                /*adapterDataKlinik = new AdapterDataKlinik(getContext(), itemDataKlinik);
-                rvButtonNomor.setAdapter(adapterDataKlinik);*/
+                TextView bpjs, nonBpjs;
+                ImageView warnaBpjs, warnaUmum;
 
+                bpjs = (TextView) viewPendaftaran.findViewById(R.id.teksJam);
+                nonBpjs = (TextView) viewPendaftaran.findViewById(R.id.teksJam1);
+                warnaBpjs = (ImageView) viewPendaftaran.findViewById(R.id.imageWarnaBPJS);
+                warnaUmum = (ImageView) viewPendaftaran.findViewById(R.id.imageWarnaUMUM);
 
-                for (i = 0; i<20; i++){
+                bpjs.setVisibility(View.VISIBLE);
+                nonBpjs.setVisibility(View.VISIBLE);
+                warnaBpjs.setVisibility(View.VISIBLE);
+                warnaUmum.setVisibility(View.VISIBLE);
+
+                DataJamPraktek dataJamPraktek = itemJamPraktek.get(position);
+                String jam = dataJamPraktek.getJamAwal();
+                String splitJam[] = jam.split("-");
+                String jam1 = splitJam[0];
+                String jam2 = splitJam[1];
+
+                //range
+
+                /*String jamAwal[] = jam1.split(":");
+                String jamAkhir[] = jam2.split(":");
+                int jamAwal1 = Integer.parseInt(jamAwal[0]);
+                int jamAkhir1 = Integer.parseInt(jamAkhir[0]);
+
+                int jamrange;
+                String jamranges1;
+                String jamranges2;
+                ArrayList<String> arj = new ArrayList<String>();
+                for (int lit = 1; lit <= jamAkhir1; lit ++){
+                    jamrange = jamAwal1 + 1;
+                    if (jamAwal1 > 24) {
+                        jamAwal1 = jamAwal1 - 24;
+                    } else if (jamAwal1 == 24) {
+                        jamAwal1 = 00;
+                    }
+
+                    jamranges1 = String.valueOf(jamAwal1);
+                    if ("0".equals(jamranges1)){
+                        jamranges1 = "00";
+                    }
+
+                    if (jamrange > 24) {
+                        jamrange = jamrange - 24;
+                    } else if (jamrange == 24) {
+                        jamrange = 00;
+                    }
+                    jamranges2 = String.valueOf(jamrange);
+                    if("0".equals(jamranges2)){
+                        jamranges2 = "00";
+                    }
+
+                    String range1 = (jamranges1 + ":" + jampart2);
+                    String range2 = (jamranges2 + ":" + jampart4);
+                    String[] rd;
+                    System.out.println(range1 + " - " + range2);
+                    jamAwal1++;
+                    arj.add(range1 + " - " + range2);
+
+                }*/
+
+                int pos = spinnerJamPraktek.getSelectedItemPosition();
+
+                if (pos == 0){
+
+                    /*jamAwal = itemJamPraktek.get(position).getJamAwal();*/
+                    dataKlinik(tgl, iddokter, klinikid, jam1/*"2018-12-05","1", "27","09:00"*/);
+                    nomorAntrianDipakai(idKlinikDokter, tgl/*"58", "2018-12-05"*/);
+
+                    String txtKuotaPerjam = String.valueOf(kuotaperjam);
+                    textViewKuotaPerjam.setText("Kuota pasien perjam: " + txtKuotaPerjam);
+                } else {
+
+                    /*jamAwal = itemJamPraktek.get(position).getJamAwal();*/
+                    dataKlinik(tgl, iddokter, klinikid, jam1/*"2018-12-05","1", "27","09:00"*/);
+                    nomorAntrianDipakai(idKlinikDokter, tgl/*"58", "2018-12-05"*/);
+
+                    String txtKuotaPerjam = String.valueOf(kuotaperjam);
+                    textViewKuotaPerjam.setText("Kuota pasien perjam: " + txtKuotaPerjam);
+                }
+
+                for (i = 0; i<kuotapasien; i++){
                     button[i] = (Button) viewPendaftaran.findViewById(idArray[i]);
                     button[i].setVisibility(View.VISIBLE);
-                    button[i].setText(""+(i+1));
+                    button[i].setText("" + (i+1));
+
                     /*button[i].setBackgroundColor(getResources().getColor(R.color.colorAccent));*/
 
                     /*if (button[i].getText().toString().equals()) {
@@ -321,106 +416,186 @@ public class Pendaftaran extends Fragment {
                         @Override
                         public void onClick(View v) {
 
+                            SimpleDateFormat format= new SimpleDateFormat("yyyy-MM-dd",Locale.getDefault()); //get tgl hari ini
+
+                            tglDaftar = format.format(new Date());
+
                             switch (v.getId()){
                                 case R.id.btn1:
-                                    if (!jaminan.trim().equals("BPJS"))
-                                    Toast.makeText(getActivity(), "Hanya pasien BPJS", Toast.LENGTH_SHORT).show();
+
+                                    if (!jaminan.trim().equals("BPJS")){
+                                        Toast.makeText(getActivity(), "Hanya pasien BPJS", Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        createAndShowAlertDialog();
+                                    }
                                     break;
                                 case R.id.btn2:
-                                    if (!jaminan.trim().equals("BPJS"))
+                                    if (!jaminan.trim().equals("BPJS")) {
                                         Toast.makeText(getActivity(), "Hanya pasien BPJS", Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        createAndShowAlertDialog();
+                                    }
                                     break;
                                 case R.id.btn3:
-                                    if (jaminan.trim().equals("BPJS"))
+                                    if (jaminan.trim().equals("BPJS")){
                                         Toast.makeText(getActivity(), "Hanya pasien non BPJS", Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        createAndShowAlertDialog();
+                                    }
                                     break;
                                 case R.id.btn4:
-                                    if (jaminan.trim().equals("BPJS"))
+                                    if (jaminan.trim().equals("BPJS")){
                                         Toast.makeText(getActivity(), "Hanya pasien non BPJS", Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        createAndShowAlertDialog();
+                                    }
                                     break;
                                 case R.id.btn5:
-                                    if (!jaminan.trim().equals("BPJS"))
+                                    if (!jaminan.trim().equals("BPJS")){
                                         Toast.makeText(getActivity(), "Hanya pasien BPJS", Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        createAndShowAlertDialog();
+                                    }
                                     break;
                                 case R.id.btn6:
-                                    if (!jaminan.trim().equals("BPJS"))
+                                    if (!jaminan.trim().equals("BPJS")){
                                         Toast.makeText(getActivity(), "Hanya pasien BPJS", Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        createAndShowAlertDialog();
+                                    }
                                     break;
                                 case R.id.btn7:
-                                    if (jaminan.trim().equals("BPJS"))
+                                    if (jaminan.trim().equals("BPJS")){
                                         Toast.makeText(getActivity(), "Hanya pasien non BPJS", Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        createAndShowAlertDialog();
+                                    }
                                     break;
                                 case R.id.btn8:
-                                    if (jaminan.trim().equals("BPJS"))
+                                    if (jaminan.trim().equals("BPJS")){
                                         Toast.makeText(getActivity(), "Hanya pasien non BPJS", Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        createAndShowAlertDialog();
+                                    }
                                     break;
                                 case R.id.btn9:
-                                    if (!jaminan.trim().equals("BPJS"))
+                                    if (!jaminan.trim().equals("BPJS")){
                                         Toast.makeText(getActivity(), "Hanya pasien BPJS", Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        createAndShowAlertDialog();
+                                    }
                                     break;
                                 case R.id.btn10:
-                                    if (!jaminan.trim().equals("BPJS"))
+                                    if (!jaminan.trim().equals("BPJS")){
                                         Toast.makeText(getActivity(), "Hanya pasien BPJS", Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        createAndShowAlertDialog();
+                                    }
                                     break;
                                 case R.id.btn11:
-                                    if (jaminan.trim().equals("BPJS"))
+                                    if (jaminan.trim().equals("BPJS")){
                                         Toast.makeText(getActivity(), "Hanya pasien non BPJS", Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        createAndShowAlertDialog();
+                                    }
                                     break;
                                 case R.id.btn12:
-                                    if (jaminan.trim().equals("BPJS"))
+                                    if (jaminan.trim().equals("BPJS")){
                                         Toast.makeText(getActivity(), "Hanya pasien non BPJS", Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        createAndShowAlertDialog();
+                                    }
                                     break;
                                 case R.id.btn13:
-                                    if (!jaminan.trim().equals("BPJS"))
+                                    if (!jaminan.trim().equals("BPJS")){
                                         Toast.makeText(getActivity(), "Hanya pasien BPJS", Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        createAndShowAlertDialog();
+                                    }
                                     break;
                                 case R.id.btn14:
-                                    if (!jaminan.trim().equals("BPJS"))
+                                    if (!jaminan.trim().equals("BPJS")){
                                         Toast.makeText(getActivity(), "Hanya pasien BPJS", Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        createAndShowAlertDialog();
+                                    }
                                     break;
                                 case R.id.btn15:
-                                    if (jaminan.trim().equals("BPJS"))
+                                    if (jaminan.trim().equals("BPJS")){
                                         Toast.makeText(getActivity(), "Hanya pasien non BPJS", Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        createAndShowAlertDialog();
+                                    }
                                     break;
                                 case R.id.btn16:
-                                    if (jaminan.trim().equals("BPJS"))
+                                    if (jaminan.trim().equals("BPJS")){
                                         Toast.makeText(getActivity(), "Hanya pasien non BPJS", Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        createAndShowAlertDialog();
+                                    }
                                     break;
                                 case R.id.btn17:
-                                    if (!jaminan.trim().equals("BPJS"))
+                                    if (!jaminan.trim().equals("BPJS")){
                                         Toast.makeText(getActivity(), "Hanya pasien BPJS", Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        createAndShowAlertDialog();
+                                    }
                                     break;
                                 case R.id.btn18:
-                                    if (!jaminan.trim().equals("BPJS"))
+                                    if (!jaminan.trim().equals("BPJS")){
                                         Toast.makeText(getActivity(), "Hanya pasien BPJS", Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        createAndShowAlertDialog();
+                                    }
                                     break;
                                 case R.id.btn19:
-                                    if (jaminan.trim().equals("BPJS"))
+                                    if (jaminan.trim().equals("BPJS")){
                                         Toast.makeText(getActivity(), "Hanya pasien non BPJS", Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        createAndShowAlertDialog();
+                                    }
                                     break;
                                 case R.id.btn20:
-                                    if (jaminan.trim().equals("BPJS"))
+                                    if (jaminan.trim().equals("BPJS")){
                                         Toast.makeText(getActivity(), "Hanya pasien non BPJS", Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        createAndShowAlertDialog();
+                                    }
                                     break;
                                 case R.id.btn21:
-                                    if (!jaminan.trim().equals("BPJS"))
+                                    if (!jaminan.trim().equals("BPJS")){
                                         Toast.makeText(getActivity(), "Hanya pasien BPJS", Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        createAndShowAlertDialog();
+                                    }
                                     break;
                                 case R.id.btn22:
-                                    if (!jaminan.trim().equals("BPJS"))
+                                    if (!jaminan.trim().equals("BPJS")){
                                         Toast.makeText(getActivity(), "Hanya pasien BPJS", Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        createAndShowAlertDialog();
+                                    }
                                     break;
                                 case R.id.btn23:
-                                    if (jaminan.trim().equals("BPJS"))
+                                    if (jaminan.trim().equals("BPJS")){
                                         Toast.makeText(getActivity(), "Hanya pasien non BPJS", Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        createAndShowAlertDialog();
+                                    }
                                     break;
                                 case R.id.btn24:
-                                    if (jaminan.trim().equals("BPJS"))
+                                    if (jaminan.trim().equals("BPJS")){
                                         Toast.makeText(getActivity(), "Hanya pasien non BPJS", Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        createAndShowAlertDialog();
+                                    }
                                     break;
                                 case R.id.btn25:
-                                    if (!jaminan.trim().equals("BPJS"))
+                                    if (!jaminan.trim().equals("BPJS")){
                                         Toast.makeText(getActivity(), "Hanya pasien BPJS", Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        createAndShowAlertDialog();
+                                    }
                                     break;
                             }
 
@@ -461,17 +636,15 @@ public class Pendaftaran extends Fragment {
     return viewPendaftaran;
     }
 
-
-
-    private void newDataKlinik(String tanggalJadwal, String idDokter, String idKlinik, String waktuAwal){
+    private void dataKlinik(String tanggalJadwal, String idDokter, String idKlinik, String waktuAwal){
         itemDataKlinik.clear();
         progressDialog = new ProgressDialog(getActivity());
         progressDialog.setCancelable(false);
         progressDialog.setMessage("Memuat Nomor Urut...");
         progressDialog.show();
 
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(urlKlinik + /*"2018-12-05/and/1/and/27/and/09:00"*/tanggalJadwal + "/and/" + idDokter + "/and/"
-                + idKlinik + "/and/" + waktuAwal, new Response.Listener<JSONArray>() {
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(urlKlinik + tanggalJadwal + "/and/" + idDokter + "/and/"
+                + idKlinik + "/and/" + waktuAwal/*"2018-12-05/and/1/and/27/and/09:00/"*/, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
                 Log.d(TAG, response.toString());
@@ -482,8 +655,9 @@ public class Pendaftaran extends Fragment {
                         JSONObject object = jsonObject.getJSONObject("klinikDokter");
                         DataKlinik dataKlinik = new DataKlinik();
 
+                        namaKlinik = jsonObject.getString("namaKlinik");
                         dataKlinik.setNamaKlinik(jsonObject.getString("namaKlinik"));
-                        idKlinikDokter = jsonObject.getString("idKlinikDokter");
+                        idKlinikDokter = object.getString("idKlinikDokter");
                         dataKlinik.setIdKlinikDokter(object.getString("idKlinikDokter"));
                         dataKlinik.setDokterId(object.getString("dokterId"));
                         dataKlinik.setHariPraktek(object.getString("hariPraktek"));
@@ -492,20 +666,20 @@ public class Pendaftaran extends Fragment {
                         dataKlinik.setKlinikId(object.getString("klinikId"));
                         kuotapasien = Integer.parseInt(object.getString("kuotaPasien"));
                         dataKlinik.setKuotaPasien(object.getString("kuotaPasien"));
+                        kuotaperjam = Integer.parseInt(object.getString("kuotaPerjam"));
                         dataKlinik.setKuotaPerjam(object.getString("kuotaPerjam"));
                         dataKlinik.setWaktuJadwal(object.getString("waktuJadwal"));
                         dataKlinik.setKeteranganJadwal(object.getString("keteranganJadwal"));
                         dataKlinik.setRuangTetap(object.getString("ruangTetap"));
                         dataKlinik.setStatusPasien(object.getString("statusPasien"));
+                        tracer = object.getString("tracerTetap");
                         dataKlinik.setTracerTetap(object.getString("tracerTetap"));
 
                         itemDataKlinik.add(dataKlinik);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                    /*adapterDataKlinik.notifyDataSetChanged();*/
                     progressDialog.dismiss();
-
                 }
             }
         }, new Response.ErrorListener() {
@@ -804,8 +978,8 @@ public class Pendaftaran extends Fragment {
 
                         DataJamPraktek dataJamPraktek = new DataJamPraktek();
 
-                        dataJamPraktek.setJamAwal(JSONobj.getString("jamAwal"));
-                        dataJamPraktek.setJamAkhir(JSONobj.getString("jamAkhir"));
+                        dataJamPraktek.setJamAwal(JSONobj.getString("jamAwal") + " - " + JSONobj.getString("jamAkhir"));
+                        /*dataJamPraktek.setJamAkhir(JSONobj.getString("jamAkhir"));*/
 
                         itemJamPraktek.add(dataJamPraktek);
 
@@ -908,6 +1082,103 @@ public class Pendaftaran extends Fragment {
         }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
 
     datePickerDialog.show();
+    }
+
+    private void daftarPeriksaKunjungan(){
+        final ProgressDialog loading = ProgressDialog.show(getActivity(),"Mendaftar...","Mohon Tunggu...",false,false);
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, urlPendaftaranKunjungan,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String s) {
+                        loading.dismiss();
+                        Toast.makeText(getActivity(), s, Toast.LENGTH_LONG).show();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError volleyError) {
+                        loading.dismiss();
+                        Toast.makeText(getActivity(), volleyError.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                }){
+            @Override
+
+            protected Map<String, String> getParams() throws AuthFailureError {
+                /*String image = getStringImage(bitmap);
+                String nama_jasa = editTextJasa.getText().toString().trim();
+                String harga_jasa = editTextHarga.getText().toString().trim();
+                String deskripsi_jasa = editTextDeskripsi.getText().toString().trim();
+                String alamat = textDetail.getText().toString().trim();
+                String latitude = txt_latitude.getText().toString().trim();
+                String longitude = txt_longitude.getText().toString().trim();
+                String kategori = txt_kategori.getText().toString().trim();
+                String HPjasa = editTextWA.getText().toString().trim();
+
+                \n" +
+                "method : POST\n" +
+                        "{\n" +
+                        "\"\": \"\",\n" +
+                        "\"\": 58,\n" +
+                        "\"\": \"Pendaftaran Kunjungan Poliklinik\",\n" +
+                        "\"\": 1,\n" +
+                        "\"\": \"1\",\n" +
+                        "\"\": \"Sendiri\",\n" +
+                        "\"\": \"2018-11-28\",\n" +
+                        "\"\": \"Tidak\",\n" +
+                        "\"\": \"UMUM\",\n" +
+                        "\"\": \"11\",\n" +
+                        "\"\": \"2018-11-28\"\n" +
+                        "}*/
+
+                String idPasien = sharedPreferences.getString("idPasien", null);
+
+                Map<String,String> params = new Hashtable<String, String>();
+                params.put("keterangan", "");
+                params.put("klinikDokterId", idKlinikDokter);
+                if (!statusPasien.equals("Fisioterapi")){
+                    params.put("statusTerakhirPasien", "Pendaftaran Kunjungan Poliklinik");
+                } else {
+                    params.put("statusTerakhirPasien", "Pendaftaran Kunjungan Fisioterapi");
+                }
+                params.put("noAntrian", noAntrian);
+                params.put("jam", "1??");
+                params.put("caraMasuk", "Sendiri");
+                params.put("tanggalPeriksa", tgl);
+                params.put("tracer", tracer);
+                params.put("caraBayar", jaminan);
+                assert idPasien != null;
+                params.put("pasienId", idPasien);
+                params.put("tanggalPendaftaran", tglDaftar);
+
+                return params;
+            }
+        };
+
+        RequestQueue requestQueue = Volley.newRequestQueue(getActivity().getApplicationContext());
+
+        requestQueue.add(stringRequest);
+
+    }
+
+
+
+    private void createAndShowAlertDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("Konfirmasi pendaftaran periksa?");
+        builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                //TODO
+
+            }
+        });
+        builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                //TODO
+                dialog.dismiss();
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
 
