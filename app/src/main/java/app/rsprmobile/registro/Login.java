@@ -132,7 +132,7 @@ public class Login extends AppCompatActivity {
 
         //===Cek sesi==//
         sharedPreferences = getSharedPreferences(my_shared_preferences, Context.MODE_PRIVATE);
-        session = sharedPreferences.getBoolean(session_status, true);
+        session = sharedPreferences.getBoolean(session_status, false);
         nama = sharedPreferences.getString(tagNama, null);
         noRm = sharedPreferences.getString(tagNoRm, null);
         noBpjs = sharedPreferences.getString(tagNoBpjs, null);
