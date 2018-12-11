@@ -187,9 +187,9 @@ public class MainActivity extends AppCompatActivity
             fragmentClass = Poli.class;
         }  else if (id == R.id.nav_share) {
             fragmentClass = Histori.class;
-        } else if (id == R.id.nav_send) {
+        } /*else if (id == R.id.nav_send) {
 
-        } try {
+        }*/ try {
             fragment = (Fragment) fragmentClass.newInstance();
         } catch (IllegalAccessException | InstantiationException e) {
             e.printStackTrace();

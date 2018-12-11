@@ -7,6 +7,10 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.drawable.ShapeDrawable;
+import android.graphics.drawable.shapes.RectShape;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -83,7 +87,7 @@ import static app.rsprmobile.registro.Poli.urlPoli;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class Pendaftaran extends Fragment {
+public class Pendaftaran extends Fragment implements AdapterView.OnItemClickListener {
 
     ProgressDialog progressDialog;
 
@@ -131,7 +135,9 @@ public class Pendaftaran extends Fragment {
 
     private static final int[] idArray = {R.id.btn1, R.id.btn2, R.id.btn3, R.id.btn4, R.id.btn5,
             R.id.btn6, R.id.btn7, R.id.btn8, R.id.btn9, R.id.btn10, R.id.btn11, R.id.btn12, R.id.btn13, R.id.btn14, R.id.btn15,
-            R.id.btn16, R.id.btn17, R.id.btn18, R.id.btn19, R.id.btn20, R.id.btn21, R.id.btn22, R.id.btn23, R.id.btn24, R.id.btn25};
+            R.id.btn16, R.id.btn17, R.id.btn18, R.id.btn19, R.id.btn20, R.id.btn21, R.id.btn22, R.id.btn23, R.id.btn24, R.id.btn25,
+            R.id.btn26, R.id.btn27, R.id.btn28, R.id.btn29, R.id.btn30, R.id.btn31, R.id.btn32, R.id.btn33, R.id.btn34, R.id.btn35,
+            R.id.btn36, R.id.btn37, R.id.btn38, R.id.btn39, R.id.btn40};
     private Button[] button = new Button[idArray.length];
 
     private int i, kuotapasien, kuotaperjam;
@@ -335,27 +341,30 @@ public class Pendaftaran extends Fragment {
                 String jam1 = splitJam[0];
                 String jam2 = splitJam[1];
 
-                //range
+                String[] jamm1 = jam1.split(":");
+                String jampart1 = jamm1[0];
+                String jampart2 = jamm1[1];
 
-                /*String jamAwal[] = jam1.split(":");
-                String jamAkhir[] = jam2.split(":");
-                int jamAwal1 = Integer.parseInt(jamAwal[0]);
-                int jamAkhir1 = Integer.parseInt(jamAkhir[0]);
+                String[] jams1 = jam2.split(":");
+                String jampart3 = jams1[0];
+                String jampart4 = jams1[1];
+
+                int jamp1 = Integer.parseInt(jampart1);
+                int jamp3 = (Integer.parseInt(jampart3) - jamp1);
 
                 int jamrange;
                 String jamranges1;
                 String jamranges2;
                 ArrayList<String> arj = new ArrayList<String>();
-                for (int lit = 1; lit <= jamAkhir1; lit ++){
-                    jamrange = jamAwal1 + 1;
-                    if (jamAwal1 > 24) {
-                        jamAwal1 = jamAwal1 - 24;
-                    } else if (jamAwal1 == 24) {
-                        jamAwal1 = 00;
+                for (int lit = 1; lit <= jamp3; lit++) {
+                    jamrange = jamp1 + 1;
+                    if (jamp1 > 24) {
+                        jamp1 = jamp1 - 24;
+                    } else if (jamp1 == 24) {
+                        jamp1 = 00;
                     }
-
-                    jamranges1 = String.valueOf(jamAwal1);
-                    if ("0".equals(jamranges1)){
+                    jamranges1 = String.valueOf(jamp1);
+                    if ("0".equals(jamranges1)) {
                         jamranges1 = "00";
                     }
 
@@ -365,56 +374,47 @@ public class Pendaftaran extends Fragment {
                         jamrange = 00;
                     }
                     jamranges2 = String.valueOf(jamrange);
-                    if("0".equals(jamranges2)){
+                    if ("0".equals(jamranges2)) {
                         jamranges2 = "00";
                     }
-
                     String range1 = (jamranges1 + ":" + jampart2);
                     String range2 = (jamranges2 + ":" + jampart4);
                     String[] rd;
-                    System.out.println(range1 + " - " + range2);
-                    jamAwal1++;
+
+                    jamp1++;
                     arj.add(range1 + " - " + range2);
-
-                }*/
-
-                int pos = spinnerJamPraktek.getSelectedItemPosition();
-
-                if (pos == 0){
-
-                    /*jamAwal = itemJamPraktek.get(position).getJamAwal();*/
-                    dataKlinik(tgl, iddokter, klinikid, jam1/*"2018-12-05","1", "27","09:00"*/);
-                    nomorAntrianDipakai(idKlinikDokter, tgl/*"58", "2018-12-05"*/);
-
-                    String txtKuotaPerjam = String.valueOf(kuotaperjam);
-                    textViewKuotaPerjam.setText("Kuota pasien perjam: " + txtKuotaPerjam);
-                } else {
-
-                    /*jamAwal = itemJamPraktek.get(position).getJamAwal();*/
-                    dataKlinik(tgl, iddokter, klinikid, jam1/*"2018-12-05","1", "27","09:00"*/);
-                    nomorAntrianDipakai(idKlinikDokter, tgl/*"58", "2018-12-05"*/);
-
-                    String txtKuotaPerjam = String.valueOf(kuotaperjam);
-                    textViewKuotaPerjam.setText("Kuota pasien perjam: " + txtKuotaPerjam);
                 }
+
+                    /*jamAwal = itemJamPraktek.get(position).getJamAwal();*/
+                    dataKlinik(tgl, iddokter, klinikid, jam1/*"2018-12-05","1", "27","09:00"*/);
+                    nomorAntrianDipakai(idKlinikDokter, tgl/*"58", "2018-12-05"*/);
+
+                    String txtKuotaPerjam = String.valueOf(kuotaperjam);
+                    textViewKuotaPerjam.setText("Kuota pasien perjam: " + txtKuotaPerjam);
 
                 for (i = 0; i<kuotapasien; i++){
                     button[i] = (Button) viewPendaftaran.findViewById(idArray[i]);
                     button[i].setVisibility(View.VISIBLE);
                     button[i].setText("" + (i+1));
 
-                    /*button[i].setBackgroundColor(getResources().getColor(R.color.colorAccent));*/
+                    String txt = button[i].getText().toString();
+                    String splitTxt[] = txt.split("");
+                    String txtB = splitTxt[0];
 
-                    /*if (button[i].getText().toString().equals()) {
-                        button[i].setBackgroundColor(getResources().getColor(R.color.colorAccent));
-                    }*/
-                    /*if (button[i].getText().toString().equals(nomorAntrianDipakai.toString())) {
-                        button[i].setBackgroundColor(getResources().getColor(R.color.colorAccent));
-                    }*/
+                    /*ShapeDrawable shapedrawable = new ShapeDrawable();
+                    shapedrawable.setShape(new RectShape());
+                    shapedrawable.getPaint().setColor(Color.RED);
+                    shapedrawable.getPaint().setStrokeWidth(10f);
+                    shapedrawable.getPaint().setStyle(Paint.Style.STROKE);
+
+                    button[i].setBackground(shapedrawable);*/
 
                     button[i].setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+
+                            Button btn = (Button)v;
+                            noAntrian = btn.getText().toString();
 
                             SimpleDateFormat format= new SimpleDateFormat("yyyy-MM-dd",Locale.getDefault()); //get tgl hari ini
 
@@ -602,15 +602,6 @@ public class Pendaftaran extends Fragment {
                         }
                     });
                 }
-                /*listButton.setAdapter(adapterDataKlinik);*/
-
-                /*adapterDataKlinik = new AdapterDataKlinik(getContext(), itemDataKlinik);
-                rvButtonNomor.setAdapter(adapterDataKlinik);*/
-
-                /*"2018-12-05/and/1/and/27/and/09:00"*/
-                /*String namaklinik = itemDataKlinik.get(position).getNamaKlinik();
-
-                Toast.makeText(getContext(), namaklinik, Toast.LENGTH_LONG).show();*/
             }
 
             @Override
@@ -978,7 +969,7 @@ public class Pendaftaran extends Fragment {
 
                         DataJamPraktek dataJamPraktek = new DataJamPraktek();
 
-                        dataJamPraktek.setJamAwal(JSONobj.getString("jamAwal") + " - " + JSONobj.getString("jamAkhir"));
+                        dataJamPraktek.setJamAwal(JSONobj.getString("jamAwal") + "-" + JSONobj.getString("jamAkhir"));
                         /*dataJamPraktek.setJamAkhir(JSONobj.getString("jamAkhir"));*/
 
                         itemJamPraktek.add(dataJamPraktek);
@@ -1025,8 +1016,13 @@ public class Pendaftaran extends Fragment {
 
                         DataJamPraktek dataJamPraktek = new DataJamPraktek();
 
-                        dataJamPraktek.setJamAwal(JSONobj.getString("jamMulaiPraktek"));
+                        /*dataJamPraktek.setJamAwal(JSONobj.getString("jamMulaiPraktek"));
                         dataJamPraktek.setJamAkhir(JSONobj.getString("jamSelesaiPraktek"));
+
+                        itemJamPraktek.add(dataJamPraktek);*/
+
+                        dataJamPraktek.setJamAwal(JSONobj.getString("jamAwal") + "-" + JSONobj.getString("jamAkhir"));
+                        /*dataJamPraktek.setJamAkhir(JSONobj.getString("jamAkhir"));*/
 
                         itemJamPraktek.add(dataJamPraktek);
 
@@ -1104,31 +1100,6 @@ public class Pendaftaran extends Fragment {
             @Override
 
             protected Map<String, String> getParams() throws AuthFailureError {
-                /*String image = getStringImage(bitmap);
-                String nama_jasa = editTextJasa.getText().toString().trim();
-                String harga_jasa = editTextHarga.getText().toString().trim();
-                String deskripsi_jasa = editTextDeskripsi.getText().toString().trim();
-                String alamat = textDetail.getText().toString().trim();
-                String latitude = txt_latitude.getText().toString().trim();
-                String longitude = txt_longitude.getText().toString().trim();
-                String kategori = txt_kategori.getText().toString().trim();
-                String HPjasa = editTextWA.getText().toString().trim();
-
-                \n" +
-                "method : POST\n" +
-                        "{\n" +
-                        "\"\": \"\",\n" +
-                        "\"\": 58,\n" +
-                        "\"\": \"Pendaftaran Kunjungan Poliklinik\",\n" +
-                        "\"\": 1,\n" +
-                        "\"\": \"1\",\n" +
-                        "\"\": \"Sendiri\",\n" +
-                        "\"\": \"2018-11-28\",\n" +
-                        "\"\": \"Tidak\",\n" +
-                        "\"\": \"UMUM\",\n" +
-                        "\"\": \"11\",\n" +
-                        "\"\": \"2018-11-28\"\n" +
-                        "}*/
 
                 String idPasien = sharedPreferences.getString("idPasien", null);
 
@@ -1187,6 +1158,11 @@ public class Pendaftaran extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         Objects.requireNonNull(getActivity()).setTitle("Daftar Periksa");
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
     }
 
     interface OnFragmentInteractionListener {

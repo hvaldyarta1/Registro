@@ -28,6 +28,7 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+import app.rsprmobile.registro.Captcha.MathCaptcha;
 import app.rsprmobile.registro.Captcha.TextCaptcha;
 import app.rsprmobile.registro.app.AppController;
 
@@ -37,7 +38,8 @@ public class Login extends AppCompatActivity {
     Button buttonLogin, btnLihat;
     private static final String urlLogin = "http://192.168.11.183:8080/PasienV2/PasienV2/cekLoginRegistro/";
 
-    TextCaptcha textCaptcha = new TextCaptcha(600, 150, 4, TextCaptcha.TextOptions.LETTERS_ONLY);
+    /*TextCaptcha textCaptcha = new TextCaptcha(600, 150, 4, TextCaptcha.TextOptions.LETTERS_ONLY);*/
+    MathCaptcha mathCaptcha = new MathCaptcha(600, 150, MathCaptcha.MathOptions.PLUS_MINUS);
     ImageView imageCaptcha;
     EditText textJawabanCaptcha;
 
@@ -128,7 +130,7 @@ public class Login extends AppCompatActivity {
         imageCaptcha = (ImageView) findViewById(R.id.imageViewCaptcha);
         textJawabanCaptcha = (EditText) findViewById(R.id.editTextCaptcha);
 
-        imageCaptcha.setImageBitmap(textCaptcha.getImage());
+        imageCaptcha.setImageBitmap(mathCaptcha.getImage());
 
         //===Cek sesi==//
         sharedPreferences = getSharedPreferences(my_shared_preferences, Context.MODE_PRIVATE);
@@ -156,7 +158,7 @@ public class Login extends AppCompatActivity {
                 final String noRM = textRM.getText().toString();
                 final String tgLahir = textTgLahir.getText().toString();
 
-                if (!textCaptcha.checkAnswer(textJawabanCaptcha.getText().toString().trim())){
+                if (!mathCaptcha.checkAnswer(textJawabanCaptcha.getText().toString().trim())){
                     textJawabanCaptcha.setError("Captcha tidak cocok");
                     int numberOfCaptchaFalse = 0;
                     numberOfCaptchaFalse++;

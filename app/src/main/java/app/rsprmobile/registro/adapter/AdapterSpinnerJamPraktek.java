@@ -50,7 +50,7 @@ public class AdapterSpinnerJamPraktek extends BaseAdapter {
 
         DataJamPraktek dataJamPraktek = jamPratek.get(position);
 
-        textJam.setText(dataJamPraktek.getJamAwal() + " - " + dataJamPraktek.getJamAkhir());
+        textJam.setText(dataJamPraktek.getJamAwal()/*dataJamPraktek.getJamAwal() + " - " + dataJamPraktek.getJamAkhir()*/);
         return convertView;
     }
 }

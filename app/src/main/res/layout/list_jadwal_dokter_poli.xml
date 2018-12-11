@@ -52,6 +52,7 @@
         android:layout_marginStart="12dp"
         android:layout_marginTop="8dp"
         android:textAllCaps="true"
+        android:textStyle="bold"
         android:text="@string/hari_praktek_jadwal"
         app:layout_constraintStart_toEndOf="@+id/iconJam"
         app:layout_constraintTop_toTopOf="parent" />
