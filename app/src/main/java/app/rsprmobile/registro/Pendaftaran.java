@@ -388,7 +388,6 @@ public class Pendaftaran extends Fragment implements AdapterView.OnItemClickList
 
                 /*Toast.makeText(getContext(), idKlinikDokter, Toast.LENGTH_SHORT).show();*/
 
-
                 for (int i = 1; i <= kuotapasien; i++){
                     arrayKuota.add(i);
                     arrayKuota.removeAll(nomorDipakai);
