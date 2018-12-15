@@ -339,10 +339,10 @@ public class Pendaftaran extends Fragment implements AdapterView.OnItemClickList
                     int jamp1 = Integer.parseInt(jamawal1);
                     int jamp3 = (Integer.parseInt(jamselesai1) - jamp1);
 
-                    int jamrange; int nomorRange;
+                    int jamrange;
 
-                    String jamranges1; String antriRange1;
-                    String jamranges2; String antriRange2;
+                    String jamranges1;
+                    String jamranges2;
 
                     ArrayList<String> arj = new ArrayList<String>();
                     for (int lit = 1; lit <= jamp3; lit++) {
@@ -391,7 +391,6 @@ public class Pendaftaran extends Fragment implements AdapterView.OnItemClickList
                 for (int i = 1; i <= kuotapasien; i++){
                     arrayKuota.add(i);
                     arrayKuota.removeAll(nomorDipakai);
-
                 }
 
 
