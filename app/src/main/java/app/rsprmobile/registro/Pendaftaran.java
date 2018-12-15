@@ -7,15 +7,10 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.drawable.ShapeDrawable;
-import android.graphics.drawable.shapes.RectShape;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -29,7 +24,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -49,21 +43,16 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Hashtable;
-import java.util.IllegalFormatCodePointException;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
-import app.rsprmobile.registro.adapter.AdapterDataKlinik;
-import app.rsprmobile.registro.adapter.AdapterGridDokter;
+import app.rsprmobile.registro.adapter.AdapterButtonNomor;
 import app.rsprmobile.registro.adapter.AdapterJadwal;
 import app.rsprmobile.registro.adapter.AdapterJadwalPoli;
 import app.rsprmobile.registro.adapter.AdapterSinnerSemuaDokter;
@@ -75,7 +64,6 @@ import app.rsprmobile.registro.data.DataDokter;
 import app.rsprmobile.registro.data.DataDokterPoli;
 import app.rsprmobile.registro.data.DataJadwal;
 import app.rsprmobile.registro.data.DataJadwalPoli;
-import app.rsprmobile.registro.data.DataJamPraktek;
 import app.rsprmobile.registro.data.DataKlinik;
 import app.rsprmobile.registro.data.DataNomorAntrianDipakai;
 import app.rsprmobile.registro.data.DataPoli;
@@ -108,7 +96,7 @@ public class Pendaftaran extends Fragment implements AdapterView.OnItemClickList
     AdapterJadwal adapterJadwal;
     AdapterJadwalPoli adapterJadwalPoli;
     AdapterSpinnerJamPraktek adapterSpinnerJamPraktek;
-    AdapterDataKlinik adapterDataKlinik;
+    AdapterButtonNomor adapterButtonNomor;
     ArrayAdapter<String> adapterJamPraktek;
     List<DataDokter> semuaDokter = new ArrayList<DataDokter>();
     List<DataDokterPoli> dokterPoli = new ArrayList<DataDokterPoli>();
@@ -121,8 +109,6 @@ public class Pendaftaran extends Fragment implements AdapterView.OnItemClickList
     ArrayList<String> arJamPraktek = new ArrayList<String>(); //rev Spinner item
     ArrayList<Integer> arrayKuota = new ArrayList<Integer>(); //array Kuota Pasien
     ArrayList<Integer> nomorDipakai = new ArrayList<Integer>(); //noAntrian Dipakai
-
-
 
     public final String urlJamPraktek = "http://192.168.11.213:8080/jadwaldokter-v04-0.0.1/Jadwal/JadwalDokterDenganidKlinikidDokteridTanggal/";
     public final String urlJamPraktekDokter = "http://192.168.11.213:8080/jadwaldokter-v04-0.0.1/Jadwal/JadwalDokterDenganTanggalDokter/";
@@ -209,7 +195,7 @@ public class Pendaftaran extends Fragment implements AdapterView.OnItemClickList
         adapterJadwalPoli = new AdapterJadwalPoli(getActivity(), jadwalDokterPoli);
 
         sharedPreferences = this.getActivity().getSharedPreferences(Login.my_shared_preferences, Context.MODE_PRIVATE);
-        
+
         spinnerPenjamin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -217,13 +203,13 @@ public class Pendaftaran extends Fragment implements AdapterView.OnItemClickList
 
                 if (jaminan.trim().equals("BPJS")){
 
-                   String noBpjs = sharedPreferences.getString("noBpjs", null);
-                   if (noBpjs != null){
-                       Toast.makeText(getContext(), jaminan + " dipilih", Toast.LENGTH_SHORT).show();
-                       spinnerJenis.setVisibility(View.VISIBLE);
-                   } else {
-                       Toast.makeText(getContext(), "Anda tidak memiliki no. BPJS", Toast.LENGTH_LONG).show();
-                   }
+                    String noBpjs = sharedPreferences.getString("noBpjs", null);
+                    if (noBpjs != null){
+                        Toast.makeText(getContext(), jaminan + " dipilih", Toast.LENGTH_SHORT).show();
+                        spinnerJenis.setVisibility(View.VISIBLE);
+                    } else {
+                        Toast.makeText(getContext(), "Anda tidak memiliki no. BPJS", Toast.LENGTH_LONG).show();
+                    }
 
                 } else if (jaminan.trim().equals("Asuransi")){
                     Toast.makeText(getContext(), jaminan + " dipilih", Toast.LENGTH_SHORT).show();
@@ -330,15 +316,16 @@ public class Pendaftaran extends Fragment implements AdapterView.OnItemClickList
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-                TextView bpjs, nonBpjs;
-                ImageView warnaBpjs, warnaUmum;
-
-                //DataJamPraktek dataJamPraktek = itemJamPraktek.get(position);
                 if (!spinnerJamPraktek.getSelectedItem().toString().equals("-- Pilih Jam Praktek --")){
                     String jam = spinnerJamPraktek.getSelectedItem().toString();//dataJamPraktek.getJamAwal();
+                    Toast.makeText(getContext(), jam, Toast.LENGTH_SHORT).show();
+
                     String splitJam[] = jam.split("-");
                     String jam1 = splitJam[0];
                     String jam2 = splitJam[1];
+
+                    dataKlinik(tgl, iddokter, klinikid, jam1);
+                    nomorAntrianDipakai(idKlinikDokter, tgl);
 
                     // Range
                     String[] jamawal = jam1.split(":");
@@ -346,23 +333,27 @@ public class Pendaftaran extends Fragment implements AdapterView.OnItemClickList
                     String jamawal2 = jamawal[1];
 
                     String[] jamakhir = jam2.split(":");
-                    String jamselesai1 = jamakhir[0];
+                    String jamselesai1 = jamakhir[0]; String nmrAkhir = String.valueOf(kuotapasien);
                     String jamselesai2 = jamakhir[1];
 
                     int jamp1 = Integer.parseInt(jamawal1);
                     int jamp3 = (Integer.parseInt(jamselesai1) - jamp1);
 
-                    int jamrange;
-                    String jamranges1;
-                    String jamranges2;
+                    int jamrange; int nomorRange;
+
+                    String jamranges1; String antriRange1;
+                    String jamranges2; String antriRange2;
+
                     ArrayList<String> arj = new ArrayList<String>();
                     for (int lit = 1; lit <= jamp3; lit++) {
                         jamrange = jamp1 + 1;
+
                         if (jamp1 > 24) {
                             jamp1 = jamp1 - 24;
                         } else if (jamp1 == 24) {
                             jamp1 = 00;
                         }
+
                         jamranges1 = String.valueOf(jamp1);
                         if ("0".equals(jamranges1)) {
                             jamranges1 = "00";
@@ -373,23 +364,23 @@ public class Pendaftaran extends Fragment implements AdapterView.OnItemClickList
                         } else if (jamrange == 24) {
                             jamrange = 00;
                         }
+
                         jamranges2 = String.valueOf(jamrange);
                         if ("0".equals(jamranges2)) {
                             jamranges2 = "00";
                         }
+
                         String range1 = (jamranges1 + ":" + jamawal2);
                         String range2 = (jamranges2 + ":" + jamselesai2);
 
                         jamp1++;
+
                         arj.add(range1 + " - " + range2);
                     }
 
                     final ArrayAdapter<String> adapterRange = new ArrayAdapter<String>(getActivity(),
                             android.R.layout.simple_list_item_1, arj);
                     listRange.setAdapter(adapterRange);
-
-                    dataKlinik(tgl, iddokter, klinikid, jam1);
-                    nomorAntrianDipakai(idKlinikDokter, tgl);
 
                     String txtKuotaPerjam = String.valueOf(kuotaperjam);
                     textViewKuotaPerjam.setText("Kuota pasien perjam: " + txtKuotaPerjam);
@@ -406,8 +397,8 @@ public class Pendaftaran extends Fragment implements AdapterView.OnItemClickList
 
 
                 rvButtonNomor.setLayoutManager(new GridLayoutManager(getActivity(),5));
-                AdapterDataKlinik adapterDataKlinik = new AdapterDataKlinik(getActivity(), arrayKuota);
-                rvButtonNomor.setAdapter(adapterDataKlinik);
+                adapterButtonNomor = new AdapterButtonNomor(getActivity(), arrayKuota);
+                rvButtonNomor.setAdapter(adapterButtonNomor);
 
             }
 
@@ -431,7 +422,7 @@ public class Pendaftaran extends Fragment implements AdapterView.OnItemClickList
         });
         //---------------
 
-    return viewPendaftaran;
+        return viewPendaftaran;
     }
 
     private void dataKlinik(String tanggalJadwal, String idDokter, String idKlinik, String waktuAwal){
@@ -673,6 +664,7 @@ public class Pendaftaran extends Fragment implements AdapterView.OnItemClickList
 
                         DataJadwal dataJadwal = new DataJadwal();
 
+                        klinikid = JSONobj.getString("klinik_id");
                         dataJadwal.setKlinik_id(JSONobj.getString("klinik_id"));
                         dataJadwal.setKuotaPasienPerjam(JSONobj.getString("kuotaPasienPerjam"));
                         dataJadwal.setKuotaPasien(JSONobj.getString("kuotaPasien"));
@@ -793,7 +785,6 @@ public class Pendaftaran extends Fragment implements AdapterView.OnItemClickList
                 VolleyLog.d(TAG, "Error: " + error.getMessage());
                 Toast.makeText(getContext(), error.getMessage(), Toast.LENGTH_LONG).show();
                 progressDialog.dismiss();
-                /*swipe.setRefreshing(false);*/
             }
         });
 
@@ -873,7 +864,7 @@ public class Pendaftaran extends Fragment implements AdapterView.OnItemClickList
             }
         }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
 
-    datePickerDialog.show();
+        datePickerDialog.show();
     }
 
     public void daftarPeriksaKunjungan(){

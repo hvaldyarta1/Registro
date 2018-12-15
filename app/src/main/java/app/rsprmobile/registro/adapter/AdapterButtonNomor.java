@@ -11,21 +11,17 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
-import java.sql.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Objects;
 
 import app.rsprmobile.registro.Pendaftaran;
 import app.rsprmobile.registro.R;
 
-
-public class AdapterDataKlinik extends RecyclerView.Adapter<AdapterDataKlinik.ViewHolder> {
+public class AdapterButtonNomor extends RecyclerView.Adapter<AdapterButtonNomor.ViewHolder> {
     private Context context;
     private ArrayList<Integer> arrayJumlah;
     // private List<DataKlinik> itemDataKlinik;
 
-    public AdapterDataKlinik(Context context, ArrayList<Integer> arrayJumlah){
+    public AdapterButtonNomor(Context context, ArrayList<Integer> arrayJumlah){
         this.context = context;
         this.arrayJumlah = arrayJumlah;
     }
@@ -33,17 +29,15 @@ public class AdapterDataKlinik extends RecyclerView.Adapter<AdapterDataKlinik.Vi
 
     @NonNull
     @Override
-    public AdapterDataKlinik.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public AdapterButtonNomor.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.button_nomor, null);
 
         return new ViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final AdapterDataKlinik.ViewHolder viewHolder, final int position) {
+    public void onBindViewHolder(@NonNull final AdapterButtonNomor.ViewHolder viewHolder, final int position) {
         viewHolder.button.setText(String.valueOf(arrayJumlah.get(position).toString()));
-
-        /*viewHolder.button.setBackgroundColor(viewHolder.button.getContext().getResources().getColor(R.color.colorPrimaryDark));*/
 
         viewHolder.button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,7 +53,7 @@ public class AdapterDataKlinik extends RecyclerView.Adapter<AdapterDataKlinik.Vi
                 builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         //TODO
-                        pendaftaran.daftarPeriksaKunjungan();
+                        //pendaftaran.daftarPeriksaKunjungan();
                     }
                 });
                 builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
@@ -75,7 +69,6 @@ public class AdapterDataKlinik extends RecyclerView.Adapter<AdapterDataKlinik.Vi
         });
 
     }
-
 
     @Override
     public int getItemCount() {

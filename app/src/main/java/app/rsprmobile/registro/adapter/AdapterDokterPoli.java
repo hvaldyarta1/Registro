@@ -2,6 +2,7 @@ package app.rsprmobile.registro.adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,6 +60,8 @@ public class AdapterDokterPoli extends BaseAdapter {
         String namaDokterPoli = dataDokterPoli.getNamaDokterTetap();
 
         txtNamaDokterPoli.setText(namaDokterPoli);
+
+        convertView.setBackgroundColor(position % 2 == 0 ? convertView.getResources().getColor(R.color.listColor) : Color.WHITE);
 
         return convertView;
     }
