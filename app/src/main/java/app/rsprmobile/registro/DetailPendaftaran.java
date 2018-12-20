@@ -26,4 +26,7 @@ public class DetailPendaftaran extends Fragment {
         return inflater.inflate(R.layout.fragment_detail_pendaftaran, container, false);
     }
 
+    interface OnFragmentInteractionListener {
+    }
+
 }

@@ -3,6 +3,7 @@ package app.rsprmobile.registro.adapter;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
@@ -36,7 +37,7 @@ import app.rsprmobile.registro.R;
 
 import static com.android.volley.VolleyLog.TAG;
 
-public class AdapterButtonNomor extends RecyclerView.Adapter<AdapterButtonNomor.ViewHolder> {
+public class AdapterButtonJam1 extends RecyclerView.Adapter<AdapterButtonJam1.ViewHolder> {
     private Context context;
     private ArrayList<Integer> arrayJumlah;
     private int kuotaMax, kuotaPerjam;
@@ -44,7 +45,7 @@ public class AdapterButtonNomor extends RecyclerView.Adapter<AdapterButtonNomor.
     private String range;
     private int noAntri;
 
-    public AdapterButtonNomor(Context context, ArrayList<Integer> arrayJumlah, int kuotaMax, int kuotaPerjam,
+    public AdapterButtonJam1(Context context, ArrayList<Integer> arrayJumlah, int kuotaMax, int kuotaPerjam,
                               String idKlinikDokter, String idPasien, String jaminan, String tracer,
                               String tgl, String statusPasien){
         this.context = context;
@@ -62,21 +63,106 @@ public class AdapterButtonNomor extends RecyclerView.Adapter<AdapterButtonNomor.
 
     @NonNull
     @Override
-    public AdapterButtonNomor.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public AdapterButtonJam1.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.button_nomor, null);
 
-        return new ViewHolder(v);
+        return new AdapterButtonJam1.ViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final AdapterButtonNomor.ViewHolder viewHolder, final int position) {
+    public void onBindViewHolder(@NonNull final AdapterButtonJam1.ViewHolder viewHolder, final int position) {
         viewHolder.button.setText(String.valueOf(arrayJumlah.get(position).toString()));
+
+        /*if (position < 2){
+            viewHolder.button.setBackgroundResource(R.color.btnBPJS);
+        } else if (position >= 2 && position < 4){
+            viewHolder.button.setBackgroundResource(R.color.btnNonBPJS);
+        } else if (position >= 4 && position < 6){
+            viewHolder.button.setBackgroundResource(R.color.btnBPJS);
+        } else if (position >= 6 && position < 8){
+            viewHolder.button.setBackgroundResource(R.color.btnNonBPJS);
+        } else if (position >= 8 && position < 10){
+            viewHolder.button.setBackgroundResource(R.color.btnBPJS);
+        } else if (position >= 10 && position < 12){
+            viewHolder.button.setBackgroundResource(R.color.btnNonBPJS);
+        } else if (position >= 12 && position < 14){
+            viewHolder.button.setBackgroundResource(R.color.btnBPJS);
+        } else if (position >= 14 && position < 16){
+            viewHolder.button.setBackgroundResource(R.color.btnNonBPJS);
+        } else if (position >= 16 && position < 18){
+            viewHolder.button.setBackgroundResource(R.color.btnBPJS);
+        } else if (position >= 18 && position < 20){
+            viewHolder.button.setBackgroundResource(R.color.btnNonBPJS);
+        }*/
 
         viewHolder.button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                int pos = viewHolder.getAdapterPosition();
+                if (pos < 2){
+                    if (!jaminan.equals("BPJS")){
+                        Toast.makeText(context, "Nomor khusus BPJS", Toast.LENGTH_SHORT).show();
+                    } else {
+                        createDialog();
+                    }
+                } else if (pos >= 2 && pos < 4){
+                    if (jaminan.equals("BPJS")){
+                        Toast.makeText(context, "Nomor khusus non-BPJS", Toast.LENGTH_SHORT).show();
+                    } else {
+                        createDialog();
+                    }
+                } else if (pos >= 4 && pos < 6){
+                    if (!jaminan.equals("BPJS")){
+                        Toast.makeText(context, "Nomor khusus BPJS", Toast.LENGTH_SHORT).show();
+                    } else {
+                        createDialog();
+                    }
+                } else if (pos >= 6 && pos < 8){
+                    if (jaminan.equals("BPJS")){
+                        Toast.makeText(context, "Nomor khusus non-BPJS", Toast.LENGTH_SHORT).show();
+                    } else {
+                        createDialog();
+                    }
+                } else if (pos >= 8 && pos < 10){
+                    if (!jaminan.equals("BPJS")){
+                        Toast.makeText(context, "Nomor khusus BPJS", Toast.LENGTH_SHORT).show();
+                    } else {
+                        createDialog();
+                    }
+                } else if (pos >= 10 && pos < 12){
+                    if (jaminan.equals("BPJS")){
+                        Toast.makeText(context, "Nomor khusus non-BPJS", Toast.LENGTH_SHORT).show();
+                    } else {
+                        createDialog();
+                    }
+                } else if (pos >= 12 && pos < 14){
+                    if (!jaminan.equals("BPJS")){
+                        Toast.makeText(context, "Nomor khusus BPJS", Toast.LENGTH_SHORT).show();
+                    } else {
+                        createDialog();
+                    }
+                } else if (pos >= 14 && pos < 16){
+                    if (jaminan.equals("BPJS")){
+                        Toast.makeText(context, "Nomor khusus non-BPJS", Toast.LENGTH_SHORT).show();
+                    } else {
+                        createDialog();
+                    }
+                } else if (pos >= 16 && pos < 18){
+                    if (!jaminan.equals("BPJS")){
+                        Toast.makeText(context, "Nomor khusus BPJS", Toast.LENGTH_SHORT).show();
+                    } else {
+                        createDialog();
+                    }
+                } else if (pos >= 18 && pos < 20){
+                    if (jaminan.equals("BPJS")){
+                        Toast.makeText(context, "Nomor khusus non-BPJS", Toast.LENGTH_SHORT).show();
+                    } else {
+                        createDialog();
+                    }
+                }
+
                 String txtBtn = viewHolder.button.getText().toString();
-                Toast.makeText(v.getContext(), txtBtn, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(v.getContext(), txtBtn, Toast.LENGTH_SHORT).show();
                 nomorAntri = txtBtn;
 
                 noAntri = Integer.parseInt(txtBtn);
@@ -99,33 +185,34 @@ public class AdapterButtonNomor extends RecyclerView.Adapter<AdapterButtonNomor.
                 SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
                 tglDaftar = formatter.format(todayDate);
 
-                Toast.makeText(v.getContext(), tglDaftar, Toast.LENGTH_SHORT).show();
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                builder.setTitle("Konfirmasi pendaftaran periksa?");
-                builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        //TODO
-                        if (jaminan.equals("BPJS")){
-                            daftarKunjunganBpjs();
-                        } else {
-                            daftarKunjungan();
-                        }
-
-                    }
-                });
-                builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        //TODO
-                        dialog.dismiss();
-                    }
-                });
-                AlertDialog dialog = builder.create();
-                dialog.show();
-
+                //Toast.makeText(v.getContext(), tglDaftar, Toast.LENGTH_SHORT).show();
             }
         });
 
+    }
+
+    private void createDialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("Konfirmasi pendaftaran periksa?");
+        builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                //TODO
+                if (jaminan.equals("BPJS")){
+                    daftarKunjunganBpjs();
+                } else {
+                    daftarKunjungan();
+                }
+
+            }
+        });
+        builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                //TODO
+                dialog.dismiss();
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     private void daftarKunjunganBpjs() {
@@ -178,8 +265,6 @@ public class AdapterButtonNomor extends RecyclerView.Adapter<AdapterButtonNomor.
                 return headers;
             }
 
-
-
         };
         RequestQueue requestQueue = Volley.newRequestQueue(context.getApplicationContext());
 
@@ -221,10 +306,10 @@ public class AdapterButtonNomor extends RecyclerView.Adapter<AdapterButtonNomor.
                         loading.dismiss();
                     }
                 }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                    VolleyLog.d(TAG, "Error: " + error.getMessage());
-                    loading.dismiss();
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.d(TAG, "Error: " + error.getMessage());
+                loading.dismiss();
             }
         }) {
 

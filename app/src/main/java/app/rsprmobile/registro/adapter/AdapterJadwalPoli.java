@@ -15,8 +15,8 @@ import app.rsprmobile.registro.data.DataJadwalPoli;
 
 public class AdapterJadwalPoli extends BaseAdapter {
     Activity activity;
-    List<DataJadwalPoli> itemJadwalPoli;
-    LayoutInflater layoutInflater;
+    private List<DataJadwalPoli> itemJadwalPoli;
+    private LayoutInflater layoutInflater;
 
     public AdapterJadwalPoli(Activity activity, List<DataJadwalPoli> itemJadwalPoli){
         this.activity = activity;
@@ -56,7 +56,7 @@ public class AdapterJadwalPoli extends BaseAdapter {
         String jamAwal = dataJadwalPoli.getJamAwal();
         String jamAkhir = dataJadwalPoli.getJamAkhir();
 
-        txtJamAwal.setText(jamAwal);
+        txtJamAwal.setText(jamAwal + " -");
         txtJamAkhir.setText(jamAkhir);
 
         String hari = dataJadwalPoli.getHariPraktek();

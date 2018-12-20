@@ -28,7 +28,8 @@ public class MainActivity extends AppCompatActivity
         Dokter.OnFragmentInteractionListener,
         Histori.OnFragmentInteractionListener,
         Pendaftaran.OnFragmentInteractionListener,
-        PeringatanLogin.OnFragmentInteractionListener {
+        PeringatanLogin.OnFragmentInteractionListener,
+        DetailPendaftaran.OnFragmentInteractionListener {
 
     SharedPreferences sharedPreferences;
 

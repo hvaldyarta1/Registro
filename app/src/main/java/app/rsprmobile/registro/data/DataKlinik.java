@@ -2,12 +2,14 @@ package app.rsprmobile.registro.data;
 
 public class DataKlinik {
     private String namaKlinik, klinikDokter, idKlinikDokter, dokterId, hariPraktek,
-    jamAwal, jamAkhir, klinikId, kuotaPasien, kuotaPerjam, waktuJadwal,
+    jamAwal, jamAkhir, klinikId, waktuJadwal,
     keteranganJadwal, ruangTetap, statusPasien, tracerTetap;
+
+    private int kuotaPasien, kuotaPerjam;
 
     public DataKlinik(String namaKlinik, String klinikDokter, String idKlinikDokter,
                       String dokterId, String hariPraktek, String jamAwal, String jamAkhir,
-                      String klinikId, String kuotaPasien, String kuotaPerjam,
+                      String klinikId, int kuotaPasien, int kuotaPerjam,
                       String waktuJadwal, String keteranganJadwal, String ruangTetap,
                       String statusPasien, String tracerTetap){
         this.namaKlinik = namaKlinik;
@@ -95,19 +97,19 @@ public class DataKlinik {
         this.klinikId = klinikId;
     }
 
-    public String getKuotaPasien() {
+    public int getKuotaPasien() {
         return kuotaPasien;
     }
 
-    public void setKuotaPasien(String kuotaPasien) {
+    public void setKuotaPasien(int kuotaPasien) {
         this.kuotaPasien = kuotaPasien;
     }
 
-    public String getKuotaPerjam() {
+    public int getKuotaPerjam() {
         return kuotaPerjam;
     }
 
-    public void setKuotaPerjam(String kuotaPerjam) {
+    public void setKuotaPerjam(int kuotaPerjam) {
         this.kuotaPerjam = kuotaPerjam;
     }
 
