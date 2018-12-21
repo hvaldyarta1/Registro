@@ -2,6 +2,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/scroll"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Pendaftaran">
@@ -12,18 +13,18 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    <Spinner
-        android:id="@+id/spinnerJaminan"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="8dp"
-        android:textAlignment="center"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <Spinner
+            android:id="@+id/spinnerJaminan"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="8dp"
+            android:textAlignment="center"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <Spinner
             android:id="@+id/spinnerJenisPeriksa"
@@ -41,19 +42,19 @@
 
         <Spinner
             android:id="@+id/spinnerDokter"
-            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:padding="8dp"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/spinnerPoli" />
 
-    <!--<TextView
+        <!--<TextView
         android:id="@+id/txtViewDokterDipilih"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -73,41 +74,41 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
+            android:background="#d0e7ff"
             android:fadeScrollbars="false"
             android:paddingTop="8dp"
             android:paddingBottom="8dp"
             android:visibility="gone"
-            android:background="#d0e7ff"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/spinnerDokter" />
 
-    <Button
-        android:id="@+id/buttonTanggal"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="8dp"
-        android:text="Pilih Tanggal"
-        android:enabled="false"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/imageView2"
-        app:layout_constraintTop_toBottomOf="@+id/listJadwal" />
+        <Button
+            android:id="@+id/buttonTanggal"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="8dp"
+            android:enabled="false"
+            android:text="Pilih Tanggal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/imageView2"
+            app:layout_constraintTop_toBottomOf="@+id/listJadwal" />
 
 
-    <ImageView
-        android:id="@+id/imageView2"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
-        android:src="@drawable/tanggal"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/listJadwal" />
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:src="@drawable/tanggal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/listJadwal" />
 
-    <!--<TextView
+        <!--<TextView
         android:id="@+id/textViewNomor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -119,13 +120,13 @@
 
         <Spinner
             android:id="@+id/spinnerPoli"
-            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="8dp"
             android:padding="8dp"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -210,8 +211,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
             android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
             android:background="#95e26e"
             android:orientation="horizontal"
             android:visibility="gone"
@@ -224,7 +225,7 @@
                 android:id="@+id/rvButtonAntri1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"/>
+                android:layout_weight="1" />
 
             <TextView
                 android:id="@+id/txtRange1"
@@ -256,7 +257,7 @@
                 android:id="@+id/rvButtonAntri2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"/>
+                android:layout_weight="1" />
 
             <TextView
                 android:id="@+id/txtRange2"
@@ -277,9 +278,9 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
+            android:background="#95e26e"
             android:orientation="horizontal"
             android:visibility="gone"
-            android:background="#95e26e"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/layoutHolder2"
@@ -289,7 +290,7 @@
                 android:id="@+id/rvButtonAntri3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"/>
+                android:layout_weight="1" />
 
             <TextView
                 android:id="@+id/txtRange3"
@@ -308,8 +309,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
             android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
             android:orientation="horizontal"
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
@@ -321,7 +322,7 @@
                 android:id="@+id/rvButtonAntri4"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"/>
+                android:layout_weight="1" />
 
             <TextView
                 android:id="@+id/txtRange4"
@@ -340,11 +341,11 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
             android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:background="#95e26e"
             android:orientation="horizontal"
             android:visibility="gone"
-            android:background="#95e26e"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/layoutHolder4"
@@ -354,7 +355,7 @@
                 android:id="@+id/rvButtonAntri5"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"/>
+                android:layout_weight="1" />
 
             <TextView
                 android:id="@+id/txtRange5"
@@ -373,8 +374,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
             android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
             android:orientation="horizontal"
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
@@ -386,7 +387,7 @@
                 android:id="@+id/rvButtonAntri6"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"/>
+                android:layout_weight="1" />
 
             <TextView
                 android:id="@+id/txtRange6"
@@ -405,11 +406,11 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
             android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:background="#95e26e"
             android:orientation="horizontal"
             android:visibility="gone"
-            android:background="#95e26e"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/layoutHolder6"
@@ -419,7 +420,7 @@
                 android:id="@+id/rvButtonAntri7"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"/>
+                android:layout_weight="1" />
 
             <TextView
                 android:id="@+id/txtRange7"
@@ -438,8 +439,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
             android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
             android:orientation="horizontal"
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
@@ -451,7 +452,7 @@
                 android:id="@+id/rvButtonAntri8"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"/>
+                android:layout_weight="1" />
 
             <TextView
                 android:id="@+id/txtRange8"
@@ -470,11 +471,11 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
             android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:background="#95e26e"
             android:orientation="horizontal"
             android:visibility="gone"
-            android:background="#95e26e"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/layoutHolder8"
@@ -484,7 +485,7 @@
                 android:id="@+id/rvButtonAntri9"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"/>
+                android:layout_weight="1" />
 
             <TextView
                 android:id="@+id/txtRange9"
@@ -503,8 +504,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
             android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
             android:orientation="horizontal"
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
@@ -516,7 +517,7 @@
                 android:id="@+id/rvButtonAntri10"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"/>
+                android:layout_weight="1" />
 
             <TextView
                 android:id="@+id/txtRange10"

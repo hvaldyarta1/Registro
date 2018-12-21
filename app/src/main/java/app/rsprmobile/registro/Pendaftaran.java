@@ -257,6 +257,7 @@ public class Pendaftaran extends Fragment implements AdapterView.OnItemClickList
 
         spinnerDokter = (Spinner) viewPendaftaran.findViewById(R.id.spinnerDokter);
         spinnerJamPraktek = (Spinner) viewPendaftaran.findViewById(R.id.spinnerJamPraktek);
+        spinnerJamPraktek.setVisibility(View.GONE);
 
         arJamPraktek.add("-- Pilih Jam Praktek --");
         adapterJamPraktek = new ArrayAdapter<String>(getActivity(),
@@ -654,7 +655,92 @@ public class Pendaftaran extends Fragment implements AdapterView.OnItemClickList
                 txtKuotaMax.setVisibility(View.VISIBLE);
                 txtKuotaMax.setText("Kuota Pasien: " + String.valueOf(kuotapasien));
 
-                nomorAntrianDipakai(idKlinikDokter, tgl);
+                dataNomorDipakai(/*"58", "2018-12-05"*/idKlinikDokter, tgl);
+
+                adapterButtonJam1 = new AdapterButtonJam1(getActivity(), arrayKuota1, kuotapasien, kuotaperjam, idKlinikDokter,
+                        idPasien, jaminan, tracer, tgl, statusPasien);
+                rvBtnAntri1.setLayoutManager(new GridLayoutManager(getActivity(),5));
+
+                adapterButtonJam2 = new AdapterButtonJam2(getActivity(), arrayKuota2, kuotapasien, kuotaperjam, idKlinikDokter,
+                        idPasien, jaminan, tracer, tgl, statusPasien);
+                rvBtnAntri2.setLayoutManager(new GridLayoutManager(getActivity(),5));
+
+                adapterButtonJam3 = new AdapterButtonJam3(getActivity(), arrayKuota3, kuotapasien, kuotaperjam, idKlinikDokter,
+                        idPasien, jaminan, tracer, tgl, statusPasien);
+                rvBtnAntri3.setLayoutManager(new GridLayoutManager(getActivity(),5));
+
+                adapterButtonJam4 = new AdapterButtonJam4(getActivity(), arrayKuota4, kuotapasien, kuotaperjam, idKlinikDokter,
+                        idPasien, jaminan, tracer, tgl, statusPasien);
+                rvBtnAntri4.setLayoutManager(new GridLayoutManager(getActivity(),5));
+
+                adapterButtonJam5 = new AdapterButtonJam5(getActivity(), arrayKuota5, kuotapasien, kuotaperjam, idKlinikDokter,
+                        idPasien, jaminan, tracer, tgl, statusPasien);
+                rvBtnAntri5.setLayoutManager(new GridLayoutManager(getActivity(),5));
+
+                adapterButtonJam6 = new AdapterButtonJam6(getActivity(), arrayKuota6, kuotapasien, kuotaperjam, idKlinikDokter,
+                        idPasien, jaminan, tracer, tgl, statusPasien);
+                rvBtnAntri6.setLayoutManager(new GridLayoutManager(getActivity(),5));
+
+                adapterButtonJam7 = new AdapterButtonJam7(getActivity(), arrayKuota7, kuotapasien, kuotaperjam, idKlinikDokter,
+                        idPasien, jaminan, tracer, tgl, statusPasien);
+                rvBtnAntri7.setLayoutManager(new GridLayoutManager(getActivity(),5));
+
+                adapterButtonJam8 = new AdapterButtonJam8(getActivity(), arrayKuota8, kuotapasien, kuotaperjam, idKlinikDokter,
+                        idPasien, jaminan, tracer, tgl, statusPasien);
+                rvBtnAntri8.setLayoutManager(new GridLayoutManager(getActivity(),5));
+
+                adapterButtonJam9 = new AdapterButtonJam9(getActivity(), arrayKuota9, kuotapasien, kuotaperjam, idKlinikDokter,
+                        idPasien, jaminan, tracer, tgl, statusPasien);
+                rvBtnAntri9.setLayoutManager(new GridLayoutManager(getActivity(),5));
+
+                adapterButtonJam10 = new AdapterButtonJam10(getActivity(), arrayKuota10, kuotapasien, kuotaperjam, idKlinikDokter,
+                        idPasien, jaminan, tracer, tgl, statusPasien);
+                rvBtnAntri10.setLayoutManager(new GridLayoutManager(getActivity(),5));
+
+                /*adapterButtonNomor = new AdapterButtonNomor(getActivity(), arrayKuota, kuotapasien, kuotaperjam, idKlinikDokter,
+                        idPasien, jaminan, tracer, tgl, statusPasien);
+                rvButtonNomor.setLayoutManager(new GridLayoutManager(getActivity(),5));*/
+
+                String txtKuotaPerjam = String.valueOf(kuotaperjam);
+                textViewKuotaPerjam.setVisibility(View.VISIBLE);
+                textViewKuotaPerjam.setText("Kuota pasien perjam: " + txtKuotaPerjam);
+
+                /*adapterButtonNomor.notifyDataSetChanged();*/
+                /*rvButtonNomor.setAdapter(adapterButtonNomor);*/
+
+                progressDialog.dismiss();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.d(TAG, "Error: " + error.getMessage());
+                Toast.makeText(getContext(), error.getMessage(), Toast.LENGTH_LONG).show();
+                progressDialog.dismiss();
+            }
+        });
+
+        AppController.getInstance().addToRequestQueue(jsonArrayRequest);
+    }
+
+    private void dataNomorDipakai(String idKlinikDokter, String tanggal){
+        nomorDipakai.clear();
+
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(urlAntrianDipakai + idKlinikDokter + "/" + tanggal, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                Log.d(TAG, response.toString());
+
+                for (int i = 0; i < response.length(); i++) {
+                    try {
+                        JSONObject jsonObject = response.getJSONObject(i);
+
+                        nomorDipakai.add(jsonObject.getInt("noAntrian"));
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    progressDialog.dismiss();
+                }
 
                 int sesi = kuotapasien / kuotaperjam;
                 if (sesi==1){
@@ -990,59 +1076,11 @@ public class Pendaftaran extends Fragment implements AdapterView.OnItemClickList
                         arrayKuota9.removeAll(nomorDipakai);
                     }
 
-                    for (int i = kuotaperjam * 9 + 1; i <= kuotaperjam *10; i++){
+                    for (int j = kuotaperjam * 9 + 1; j <= kuotaperjam *10; j++){
                         arrayKuota10.add(i);
                         arrayKuota10.removeAll(nomorDipakai);
                     }
                 }
-
-                adapterButtonJam1 = new AdapterButtonJam1(getActivity(), arrayKuota1, kuotapasien, kuotaperjam, idKlinikDokter,
-                        idPasien, jaminan, tracer, tgl, statusPasien);
-                rvBtnAntri1.setLayoutManager(new GridLayoutManager(getActivity(),5));
-
-                adapterButtonJam2 = new AdapterButtonJam2(getActivity(), arrayKuota2, kuotapasien, kuotaperjam, idKlinikDokter,
-                        idPasien, jaminan, tracer, tgl, statusPasien);
-                rvBtnAntri2.setLayoutManager(new GridLayoutManager(getActivity(),5));
-
-                adapterButtonJam3 = new AdapterButtonJam3(getActivity(), arrayKuota3, kuotapasien, kuotaperjam, idKlinikDokter,
-                        idPasien, jaminan, tracer, tgl, statusPasien);
-                rvBtnAntri3.setLayoutManager(new GridLayoutManager(getActivity(),5));
-
-                adapterButtonJam4 = new AdapterButtonJam4(getActivity(), arrayKuota4, kuotapasien, kuotaperjam, idKlinikDokter,
-                        idPasien, jaminan, tracer, tgl, statusPasien);
-                rvBtnAntri4.setLayoutManager(new GridLayoutManager(getActivity(),5));
-
-                adapterButtonJam5 = new AdapterButtonJam5(getActivity(), arrayKuota5, kuotapasien, kuotaperjam, idKlinikDokter,
-                        idPasien, jaminan, tracer, tgl, statusPasien);
-                rvBtnAntri5.setLayoutManager(new GridLayoutManager(getActivity(),5));
-
-                adapterButtonJam6 = new AdapterButtonJam6(getActivity(), arrayKuota6, kuotapasien, kuotaperjam, idKlinikDokter,
-                        idPasien, jaminan, tracer, tgl, statusPasien);
-                rvBtnAntri6.setLayoutManager(new GridLayoutManager(getActivity(),5));
-
-                adapterButtonJam7 = new AdapterButtonJam7(getActivity(), arrayKuota7, kuotapasien, kuotaperjam, idKlinikDokter,
-                        idPasien, jaminan, tracer, tgl, statusPasien);
-                rvBtnAntri7.setLayoutManager(new GridLayoutManager(getActivity(),5));
-
-                adapterButtonJam8 = new AdapterButtonJam8(getActivity(), arrayKuota8, kuotapasien, kuotaperjam, idKlinikDokter,
-                        idPasien, jaminan, tracer, tgl, statusPasien);
-                rvBtnAntri8.setLayoutManager(new GridLayoutManager(getActivity(),5));
-
-                adapterButtonJam9 = new AdapterButtonJam9(getActivity(), arrayKuota9, kuotapasien, kuotaperjam, idKlinikDokter,
-                        idPasien, jaminan, tracer, tgl, statusPasien);
-                rvBtnAntri9.setLayoutManager(new GridLayoutManager(getActivity(),5));
-
-                adapterButtonJam10 = new AdapterButtonJam10(getActivity(), arrayKuota10, kuotapasien, kuotaperjam, idKlinikDokter,
-                        idPasien, jaminan, tracer, tgl, statusPasien);
-                rvBtnAntri10.setLayoutManager(new GridLayoutManager(getActivity(),5));
-
-                /*adapterButtonNomor = new AdapterButtonNomor(getActivity(), arrayKuota, kuotapasien, kuotaperjam, idKlinikDokter,
-                        idPasien, jaminan, tracer, tgl, statusPasien);
-                rvButtonNomor.setLayoutManager(new GridLayoutManager(getActivity(),5));*/
-
-                String txtKuotaPerjam = String.valueOf(kuotaperjam);
-                textViewKuotaPerjam.setVisibility(View.VISIBLE);
-                textViewKuotaPerjam.setText("Kuota pasien perjam: " + txtKuotaPerjam);
 
                 adapterButtonJam1.notifyDataSetChanged();
                 adapterButtonJam2.notifyDataSetChanged();
@@ -1066,45 +1104,6 @@ public class Pendaftaran extends Fragment implements AdapterView.OnItemClickList
                 rvBtnAntri8.setAdapter(adapterButtonJam8);
                 rvBtnAntri9.setAdapter(adapterButtonJam9);
                 rvBtnAntri10.setAdapter(adapterButtonJam10);
-
-                /*adapterButtonNomor.notifyDataSetChanged();*/
-                /*rvButtonNomor.setAdapter(adapterButtonNomor);*/
-
-                progressDialog.dismiss();
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                VolleyLog.d(TAG, "Error: " + error.getMessage());
-                Toast.makeText(getContext(), error.getMessage(), Toast.LENGTH_LONG).show();
-                progressDialog.dismiss();
-            }
-        });
-
-        AppController.getInstance().addToRequestQueue(jsonArrayRequest);
-    }
-
-    private void nomorAntrianDipakai(String idKlinikDokter, String tanggal){
-        //nomorAntrianDipakai.clear();
-        nomorDipakai.clear();
-
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(urlAntrianDipakai + idKlinikDokter + "/" + tanggal, new Response.Listener<JSONArray>() {
-            @Override
-            public void onResponse(JSONArray response) {
-                Log.d(TAG, response.toString());
-
-                for (int i = 0; i < response.length(); i++) {
-                    try {
-                        JSONObject jsonObject = response.getJSONObject(i);
-
-                        //nomorDipakai.add(1);
-                        nomorDipakai.add(jsonObject.getInt("noAntrian"));
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    progressDialog.dismiss();
-                }
             }
         }, new Response.ErrorListener() {
             @Override

@@ -8,6 +8,7 @@
         android:id="@+id/btnNomor"
         android:layout_width="wrap_content"
         android:paddingTop="4dp"
+        android:textSize="12sp"
         android:layout_marginEnd="4dp"
         android:layout_height="50dp" />
 

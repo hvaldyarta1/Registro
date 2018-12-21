@@ -1,9 +1,9 @@
 package app.rsprmobile.registro.data;
 
 public class DataNomorAntrianDipakai {
-    private String noAntrian;
+    private int noAntrian;
 
-    public DataNomorAntrianDipakai(String noAntrian){
+    public DataNomorAntrianDipakai(int noAntrian){
         this.noAntrian = noAntrian;
     }
 
@@ -11,11 +11,11 @@ public class DataNomorAntrianDipakai {
 
     }
 
-    public String getNoAntrian() {
+    public int getNoAntrian() {
         return noAntrian;
     }
 
-    public void setNoAntrian(String noAntrian) {
+    public void setNoAntrian(int noAntrian) {
         this.noAntrian = noAntrian;
     }
 }
