@@ -5,11 +5,14 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
 
 import java.util.List;
 
@@ -38,6 +41,22 @@ public class AdapterGridPoli extends RecyclerView.Adapter<AdapterGridPoli.ViewHo
     @Override
     public void onBindViewHolder(@NonNull AdapterGridPoli.ViewHolder viewHolder, final int position) {
         DataPoli dataPoli = itemPoli.get(position);
+
+        String urlImage = dataPoli.getFotoKlinik();
+        // Split
+        String[] imageStringSplit = urlImage.split(",");
+        String part1 = imageStringSplit[0];
+        String part2 = imageStringSplit[1];
+
+        String[] getBase64 = part2.split("'");
+        String imageBase64 = getBase64[0];
+
+        byte[] imageByteArray = Base64.decode(imageBase64, Base64.DEFAULT);
+        // here imageBytes is base64String
+
+        Glide.with(context)
+                .load(imageByteArray)
+                .into(viewHolder.imagePoli);
 
             viewHolder.txtPoli.setText(String.valueOf(itemPoli.get(position).getNamaKlinik()));
 
