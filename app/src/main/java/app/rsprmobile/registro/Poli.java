@@ -66,6 +66,8 @@ public class Poli extends Fragment {
         return viewPoli;
     }
 
+
+
     private void dataPoli(){
         itemPoli.clear();
         progressDialog = new ProgressDialog(getActivity());

@@ -4,8 +4,12 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -33,7 +37,11 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import app.rsprmobile.registro.DetailPendaftaran;
+import app.rsprmobile.registro.Histori;
+import app.rsprmobile.registro.MainActivity;
 import app.rsprmobile.registro.R;
+import app.rsprmobile.registro.data.DataPoli;
 
 import static com.android.volley.VolleyLog.TAG;
 
@@ -216,7 +224,7 @@ public class AdapterButtonJam1 extends RecyclerView.Adapter<AdapterButtonJam1.Vi
     }
 
     private void daftarKunjunganBpjs() {
-
+        final ProgressDialog loading = ProgressDialog.show(context,"Mendaftar...","Mohon Tunggu...",false,false);
         JSONObject json = new JSONObject();
         try {
             json.put("keterangan", "");
@@ -245,9 +253,17 @@ public class AdapterButtonJam1 extends RecyclerView.Adapter<AdapterButtonJam1.Vi
 
                     @Override
                     public void onResponse(JSONObject response) {
-                        Log.d(TAG, response.toString());
-                        //msgResponse.setText(response.toString());
-                        //hideProgressDialog();
+                        try {
+                            if (response.has("errorCode")){
+                                loading.dismiss();
+                                Toast.makeText(context, response.getString("errorMessage"), Toast.LENGTH_LONG).show();
+                            } else {
+                                loading.dismiss();
+                                Toast.makeText(context, "Berhasil mendaftar no. Antri " + response.getString("noAntrian"), Toast.LENGTH_LONG).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }, new Response.ErrorListener() {
 
@@ -264,12 +280,10 @@ public class AdapterButtonJam1 extends RecyclerView.Adapter<AdapterButtonJam1.Vi
                 headers.put("Content-Type", "application/json; charset=utf-8");
                 return headers;
             }
-
         };
         RequestQueue requestQueue = Volley.newRequestQueue(context.getApplicationContext());
 
         requestQueue.add(jsonObjReq);
-
     }
 
     private void daftarKunjungan() {
@@ -302,8 +316,31 @@ public class AdapterButtonJam1 extends RecyclerView.Adapter<AdapterButtonJam1.Vi
 
                     @Override
                     public void onResponse(JSONObject response) {
-                        Log.d(TAG, response.toString());
-                        loading.dismiss();
+                        try {
+                            if (response.has("errorCode")){
+                                loading.dismiss();
+                                Toast.makeText(context, response.getString("errorMessage"), Toast.LENGTH_LONG).show();
+                            } else {
+                                loading.dismiss();
+                                Toast.makeText(context, "Berhasil mendaftar no. Antri " + response.getString("noAntrian"), Toast.LENGTH_LONG).show();
+
+                                /*Bundle bundlePendaftaran = new Bundle();
+                                bundlePendaftaran.putString("noAntrian", response.getString("noAntrian"));
+                                bundlePendaftaran.putString("tanggalPeriksa", response.getString("tanggalPeriksa"));
+                                bundlePendaftaran.putString("jam", response.getString("jam"));*/
+
+                                /*MainActivity myActivity = (MainActivity) context;
+                                FragmentManager fragmentManager = myActivity.getSupportFragmentManager();
+                                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+                                Histori histori = new Histori();
+
+                                fragmentTransaction.replace(R.id.fragment_container, histori);
+                                fragmentTransaction.commit();*/
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }, new Response.ErrorListener() {
             @Override

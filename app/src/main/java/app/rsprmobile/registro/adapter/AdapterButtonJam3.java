@@ -194,7 +194,7 @@ public class AdapterButtonJam3 extends RecyclerView.Adapter<AdapterButtonJam3.Vi
     }
 
     private void daftarKunjunganBpjs() {
-
+        final ProgressDialog loading = ProgressDialog.show(context,"Mendaftar...","Mohon Tunggu...",false,false);
         JSONObject json = new JSONObject();
         try {
             json.put("keterangan", "");
@@ -223,9 +223,17 @@ public class AdapterButtonJam3 extends RecyclerView.Adapter<AdapterButtonJam3.Vi
 
                     @Override
                     public void onResponse(JSONObject response) {
-                        Log.d(TAG, response.toString());
-                        //msgResponse.setText(response.toString());
-                        //hideProgressDialog();
+                        try {
+                            if (response.has("errorCode")){
+                                loading.dismiss();
+                                Toast.makeText(context, response.getString("errorMessage"), Toast.LENGTH_LONG).show();
+                            } else {
+                                loading.dismiss();
+                                Toast.makeText(context, "Berhasil mendaftar no. Antri " + response.getString("noAntrian"), Toast.LENGTH_LONG).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }, new Response.ErrorListener() {
 
@@ -282,8 +290,17 @@ public class AdapterButtonJam3 extends RecyclerView.Adapter<AdapterButtonJam3.Vi
 
                     @Override
                     public void onResponse(JSONObject response) {
-                        Log.d(TAG, response.toString());
-                        loading.dismiss();
+                        try {
+                            if (response.has("errorCode")){
+                                loading.dismiss();
+                                Toast.makeText(context, response.getString("errorMessage"), Toast.LENGTH_LONG).show();
+                            } else {
+                                loading.dismiss();
+                                Toast.makeText(context, "Berhasil mendaftar no. Antri " + response.getString("noAntrian"), Toast.LENGTH_LONG).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }, new Response.ErrorListener() {
             @Override

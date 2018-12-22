@@ -43,27 +43,27 @@ public class AdapterGridPoli extends RecyclerView.Adapter<AdapterGridPoli.ViewHo
         DataPoli dataPoli = itemPoli.get(position);
 
         String urlImage = dataPoli.getFotoKlinik();
-        // Split
-        String[] imageStringSplit = urlImage.split(",");
-        String part1 = imageStringSplit[0];
-        String part2 = imageStringSplit[1];
 
-        String[] getBase64 = part2.split("'");
-        String imageBase64 = getBase64[0];
+        if (!urlImage.equals("EMPTY")){
+            // Split
+            String[] imageStringSplit = urlImage.split(",");
+            String part1 = imageStringSplit[0];
+            String part2 = imageStringSplit[1];
 
-        byte[] imageByteArray = Base64.decode(imageBase64, Base64.DEFAULT);
-        // here imageBytes is base64String
+            String[] getBase64 = part2.split("'");
+            String imageBase64 = getBase64[0];
 
-        Glide.with(context)
-                .load(imageByteArray)
-                .into(viewHolder.imagePoli);
+            byte[] imageByteArray = Base64.decode(imageBase64, Base64.DEFAULT);
+            // here imageBytes is base64String
+
+            Glide.with(context)
+                    .load(imageByteArray)
+                    .into(viewHolder.imagePoli);
 
             viewHolder.txtPoli.setText(String.valueOf(itemPoli.get(position).getNamaKlinik()));
-
-            /*String imagePoli = dataPoli.getFotoKlinik();
-            imagePoli.trim().replace("<>'", "");*/
-
+        } else {
             viewHolder.imagePoli.setImageResource(R.drawable.poli);
+        }
 
         viewHolder.imagePoli.setOnClickListener(new View.OnClickListener() {
             @Override

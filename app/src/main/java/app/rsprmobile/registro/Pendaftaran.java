@@ -27,15 +27,10 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -43,12 +38,9 @@ import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Hashtable;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Objects;
 
 import app.rsprmobile.registro.adapter.AdapterButtonJam1;
@@ -61,7 +53,6 @@ import app.rsprmobile.registro.adapter.AdapterButtonJam6;
 import app.rsprmobile.registro.adapter.AdapterButtonJam7;
 import app.rsprmobile.registro.adapter.AdapterButtonJam8;
 import app.rsprmobile.registro.adapter.AdapterButtonJam9;
-import app.rsprmobile.registro.adapter.AdapterButtonNomor;
 import app.rsprmobile.registro.adapter.AdapterJadwal;
 import app.rsprmobile.registro.adapter.AdapterJadwalPoli;
 import app.rsprmobile.registro.adapter.AdapterSinnerSemuaDokter;
@@ -103,7 +94,6 @@ public class Pendaftaran extends Fragment implements AdapterView.OnItemClickList
     AdapterJadwal adapterJadwal;
     AdapterJadwalPoli adapterJadwalPoli;
     //AdapterSpinnerJamPraktek adapterSpinnerJamPraktek;
-    AdapterButtonNomor adapterButtonNomor;
     ArrayAdapter<String> adapterJamPraktek;
     List<DataDokter> semuaDokter = new ArrayList<DataDokter>();
     List<DataDokterPoli> dokterPoli = new ArrayList<DataDokterPoli>();
@@ -350,7 +340,7 @@ public class Pendaftaran extends Fragment implements AdapterView.OnItemClickList
                 } else {
                     klinikid = poli.get(position).getIdKlinik();
                     loadDokterPoli(klinikid);
-                    Toast.makeText(getActivity(), klinikid, Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getActivity(), klinikid, Toast.LENGTH_SHORT).show();
                     adapterSpinnerDokter = new AdapterSpinnerDokterPoli(getActivity(), dokterPoli);
                     spinnerDokter.setAdapter(adapterSpinnerDokter);
 
@@ -405,7 +395,7 @@ public class Pendaftaran extends Fragment implements AdapterView.OnItemClickList
 
                 if (!spinnerJamPraktek.getSelectedItem().toString().equals("-- Pilih Jam Praktek --")){
                     String jam = spinnerJamPraktek.getSelectedItem().toString();//dataJamPraktek.getJamAwal();
-                    Toast.makeText(getContext(), jam, Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getContext(), jam, Toast.LENGTH_SHORT).show();
 
                     String splitJam[] = jam.split("-");
                     String jam1 = splitJam[0];
@@ -570,17 +560,11 @@ public class Pendaftaran extends Fragment implements AdapterView.OnItemClickList
                         txtRange1.setText(arrayrange.get(10));
                     }
 
-                    Toast.makeText(getActivity(), idKlinikDokter, Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getActivity(), idKlinikDokter, Toast.LENGTH_SHORT).show();
                     txtDokterPraktek.setVisibility(View.VISIBLE);
                     txtDokterPraktek.setText(dokter);
 
-                    /*final ArrayAdapter<String> adapterRange = new ArrayAdapter<String>(getActivity(),
-                            android.R.layout.simple_list_item_1, arrayrange);
-                    listRange.setAdapter(adapterRange);*/
-
-                } /*else if (spinnerJamPraktek.getSelectedItem().equals("-- Pilih Jam Praktek --")){
-                    arrayKuota.clear();
-                }*/
+                }
             }
 
             @Override
@@ -697,16 +681,9 @@ public class Pendaftaran extends Fragment implements AdapterView.OnItemClickList
                         idPasien, jaminan, tracer, tgl, statusPasien);
                 rvBtnAntri10.setLayoutManager(new GridLayoutManager(getActivity(),5));
 
-                /*adapterButtonNomor = new AdapterButtonNomor(getActivity(), arrayKuota, kuotapasien, kuotaperjam, idKlinikDokter,
-                        idPasien, jaminan, tracer, tgl, statusPasien);
-                rvButtonNomor.setLayoutManager(new GridLayoutManager(getActivity(),5));*/
-
                 String txtKuotaPerjam = String.valueOf(kuotaperjam);
                 textViewKuotaPerjam.setVisibility(View.VISIBLE);
                 textViewKuotaPerjam.setText("Kuota pasien perjam: " + txtKuotaPerjam);
-
-                /*adapterButtonNomor.notifyDataSetChanged();*/
-                /*rvButtonNomor.setAdapter(adapterButtonNomor);*/
 
                 progressDialog.dismiss();
             }
