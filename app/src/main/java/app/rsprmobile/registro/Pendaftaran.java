@@ -6,6 +6,7 @@ import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -36,13 +37,18 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
+import app.rsprmobile.registro.Captcha.TextCaptcha;
 import app.rsprmobile.registro.adapter.AdapterButtonJam1;
 import app.rsprmobile.registro.adapter.AdapterButtonJam10;
 import app.rsprmobile.registro.adapter.AdapterButtonJam2;
@@ -112,15 +118,15 @@ public class Pendaftaran extends Fragment implements AdapterView.OnItemClickList
     public final String urlKlinik = "http://192.168.11.213:8080/jadwaldokter-v04-0.0.1/Jadwal/JadwalDokterDenganIdKlinikIdDokterIdTanggalWaktuAwal/";
     public final String urlAntrianDipakai = "http://192.168.11.211:8080/PendaftaranV3/PendaftaranV3/getAntrianByKlinikDokterDanTanggalPeriksa/";
 
-    ListView listJadwalDokter, listRange;
+    ListView listJadwalDokter;
 
-    TextView textNamaDokter, txtKuotaMax, txtDokterPraktek;
+    TextView txtKuotaMax, txtDokterPraktek;
 
     Bundle bundle;
 
     SharedPreferences sharedPreferences;
     String jaminan, iddokter, klinikid, tgl, idPasien,
-            idKlinikDokter, namaKlinik, statusPasien, tracer, tglDaftar, dokter;
+            idKlinikDokter, namaKlinik, statusPasien, tracer, tglHariIni, dokter;
 
     public String noAntrian;
 
@@ -212,16 +218,6 @@ public class Pendaftaran extends Fragment implements AdapterView.OnItemClickList
         txtRange9 = viewPendaftaran.findViewById(R.id.txtRange9);
         txtRange10 = viewPendaftaran.findViewById(R.id.txtRange10);
 
-        // *********
-
-
-        // ===== Proses Modifikasi
-        /*rvButtonNomor = (RecyclerView) viewPendaftaran.findViewById(R.id.rvButton);
-        rvButtonNomor.setLayoutManager(new LinearLayoutManager(getActivity()));
-
-        listRange = (ListView) viewPendaftaran.findViewById(R.id.listRange);*/
-        // ===== Proses Modifikasi
-
         txtDokterPraktek = viewPendaftaran.findViewById(R.id.txtDokterPraktek);
         txtDokterPraktek.setVisibility(View.GONE);
         txtKuotaMax = viewPendaftaran.findViewById(R.id.txtKuotaMax);
@@ -243,8 +239,6 @@ public class Pendaftaran extends Fragment implements AdapterView.OnItemClickList
         adapterSpinnerPoli = new AdapterSpinnerPoli(getActivity(), poli);
         spinnerPoli.setAdapter(adapterSpinnerPoli);
 
-        /*adapterSpinnerJamPraktek = new AdapterSpinnerJamPraktek(getActivity(), itemJamPraktek);*/
-
         spinnerDokter = (Spinner) viewPendaftaran.findViewById(R.id.spinnerDokter);
         spinnerJamPraktek = (Spinner) viewPendaftaran.findViewById(R.id.spinnerJamPraktek);
         spinnerJamPraktek.setVisibility(View.GONE);
@@ -253,9 +247,6 @@ public class Pendaftaran extends Fragment implements AdapterView.OnItemClickList
         adapterJamPraktek = new ArrayAdapter<String>(getActivity(),
                 android.R.layout.simple_spinner_dropdown_item,
                 arJamPraktek);
-
-
-        //textNamaDokter = (TextView) viewPendaftaran.findViewById(R.id.txtViewDokterDipilih);
 
         listJadwalDokter = (ListView) viewPendaftaran.findViewById(R.id.listJadwal);
         listJadwalDokter.setOnTouchListener(new View.OnTouchListener() { //Scrollable list view dlm ScrollView
@@ -393,7 +384,8 @@ public class Pendaftaran extends Fragment implements AdapterView.OnItemClickList
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-                if (!spinnerJamPraktek.getSelectedItem().toString().equals("-- Pilih Jam Praktek --")){
+                if (!spinnerJamPraktek.getSelectedItem().toString().equals("-- Pilih Jam Praktek --") &&
+                        !spinnerJamPraktek.getSelectedItem().toString().equals("Tidak Praktek")){
                     String jam = spinnerJamPraktek.getSelectedItem().toString();//dataJamPraktek.getJamAwal();
                     //Toast.makeText(getContext(), jam, Toast.LENGTH_SHORT).show();
 
@@ -1274,7 +1266,6 @@ public class Pendaftaran extends Fragment implements AdapterView.OnItemClickList
         AppController.getInstance().addToRequestQueue(jArr);
     }
 
-
     private void dataJadwalDokterPoli(String idDokter, String klinikId){
         jadwalDokterPoli.clear();
 
@@ -1323,9 +1314,7 @@ public class Pendaftaran extends Fragment implements AdapterView.OnItemClickList
         AppController.getInstance().addToRequestQueue(jsonArrayRequest);
     }
 
-    private void jamPraktekTanggal(String tanggal, String idDokter, String klinikId){
-        /*itemJamPraktek.clear();*/
-        //adapterSpinnerJamPraktek.notifyDataSetChanged();
+    private void jamPraktekTanggal(String tanggal, String idDokter, String klinikId){ //Menu Poli
         arJamPraktek.subList(1, arJamPraktek.size()).clear();
         adapterJamPraktek.notifyDataSetChanged();
         progressDialog = new ProgressDialog(getActivity());
@@ -1343,11 +1332,12 @@ public class Pendaftaran extends Fragment implements AdapterView.OnItemClickList
                         JSONObject JSONobj = response.getJSONObject(i);
 
                         if (JSONobj.has("jamAwal")){
+                            spinnerJamPraktek.setVisibility(View.VISIBLE);
                             arJamPraktek.add(JSONobj.getString("jamAwal") + "-" + JSONobj.getString("jamAkhir"));
-                        } else if (JSONobj.has("errorCode")) {
+                        } /*else {
                             arJamPraktek.clear();
                             arJamPraktek.add("Tidak Praktek");
-                        }
+                        }*/
 
 
                     } catch (JSONException e) {
@@ -1355,7 +1345,6 @@ public class Pendaftaran extends Fragment implements AdapterView.OnItemClickList
                     }
                 }
 
-                //adapterSpinnerJamPraktek.notifyDataSetChanged();
                 adapterJamPraktek.notifyDataSetChanged();
                 progressDialog.dismiss();
 
@@ -1365,7 +1354,8 @@ public class Pendaftaran extends Fragment implements AdapterView.OnItemClickList
             @Override
             public void onErrorResponse(VolleyError error) {
                 VolleyLog.d(TAG, "Error: " + error.getMessage());
-                Toast.makeText(getContext(), error.getMessage(), Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), "Tidak Praktek", Toast.LENGTH_LONG).show();
+
                 progressDialog.dismiss();
             }
         });
@@ -1373,9 +1363,7 @@ public class Pendaftaran extends Fragment implements AdapterView.OnItemClickList
         AppController.getInstance().addToRequestQueue(jArr);
     }
 
-    private void jamPraktekTanggalDokter(String tanggal, String idDokter){
-        /*itemJamPraktek.clear();*/
-        //adapterSpinnerJamPraktek.notifyDataSetChanged();
+    private void jamPraktekTanggalDokter(String tanggal, String idDokter){ //Menu Dokter
         arJamPraktek.subList(1, arJamPraktek.size()).clear();
         adapterJamPraktek.notifyDataSetChanged();
         progressDialog = new ProgressDialog(getActivity());
@@ -1393,11 +1381,12 @@ public class Pendaftaran extends Fragment implements AdapterView.OnItemClickList
                         JSONObject JSONobj = response.getJSONObject(i);
 
                         if (JSONobj.has("jamMulaiPraktek")){
+                            spinnerJamPraktek.setVisibility(View.VISIBLE);
                             arJamPraktek.add(JSONobj.getString("jamMulaiPraktek") + "-" + JSONobj.getString("jamSelesaiPraktek"));
-                        } else if (JSONobj.has("errorCode")){
+                        } /*else {
                             arJamPraktek.clear();
                             arJamPraktek.add("Tidak Praktek");
-                        }
+                        }*/
 
 
                     } catch (JSONException e) {
@@ -1405,7 +1394,6 @@ public class Pendaftaran extends Fragment implements AdapterView.OnItemClickList
                     }
                 }
 
-                //adapterSpinnerJamPraktek.notifyDataSetChanged();
                 adapterJamPraktek.notifyDataSetChanged();
                 progressDialog.dismiss();
 
@@ -1415,9 +1403,9 @@ public class Pendaftaran extends Fragment implements AdapterView.OnItemClickList
             @Override
             public void onErrorResponse(VolleyError error) {
                 VolleyLog.d(TAG, "Error: " + error.getMessage());
-                Toast.makeText(getContext(), error.getMessage(), Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), "Tidak Praktek", Toast.LENGTH_LONG).show();
+
                 progressDialog.dismiss();
-                /*swipe.setRefreshing(false);*/
             }
         });
 
@@ -1439,13 +1427,34 @@ public class Pendaftaran extends Fragment implements AdapterView.OnItemClickList
                 tgl = formatTanggal.format(newDate.getTime());
                 spinnerJamPraktek.setAdapter(adapterJamPraktek);
 
+                Date todayDate = Calendar.getInstance().getTime();
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+                tglHariIni = formatter.format(todayDate);
+
                 if (klinikid == null){
-                    jamPraktekTanggalDokter(tgl, iddokter);
-                    spinnerJamPraktek.setVisibility(View.VISIBLE);
+
+                    try {
+                        if (new SimpleDateFormat("yyyy-MM-dd").parse(tgl).before(new SimpleDateFormat("yyyy-MM-dd").parse(tglHariIni))) {
+                            Toast.makeText(getActivity(), "Tanggal Sudah lewat", Toast.LENGTH_LONG).show();
+                        } else {
+                            jamPraktekTanggalDokter(tgl, iddokter);
+                            //spinnerJamPraktek.setVisibility(View.VISIBLE);
+                        }
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
 
                 } else {
-                    jamPraktekTanggal(tgl, iddokter, klinikid);
-                    spinnerJamPraktek.setVisibility(View.VISIBLE);
+                    try {
+                        if (new SimpleDateFormat("yyyy-MM-dd").parse(tgl).before(new SimpleDateFormat("yyyy-MM-dd").parse(tglHariIni))) {
+                            Toast.makeText(getActivity(), "Tanggal Sudah lewat", Toast.LENGTH_LONG).show();
+                        } else {
+                            jamPraktekTanggal(tgl, iddokter, klinikid);
+                            //spinnerJamPraktek.setVisibility(View.VISIBLE);
+                        }
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
 
                 }
 
@@ -1464,6 +1473,12 @@ public class Pendaftaran extends Fragment implements AdapterView.OnItemClickList
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
 
     }
 

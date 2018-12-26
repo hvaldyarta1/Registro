@@ -13,7 +13,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.android.volley.Response;
@@ -28,8 +27,10 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import app.rsprmobile.registro.adapter.AdapterGridDokter;
 import app.rsprmobile.registro.adapter.AdapterGridPoli;
 import app.rsprmobile.registro.app.AppController;
+import app.rsprmobile.registro.data.DataDokter;
 import app.rsprmobile.registro.data.DataPoli;
 
 
@@ -37,22 +38,21 @@ import app.rsprmobile.registro.data.DataPoli;
  * A simple {@link Fragment} subclass.
  */
 public class Poli extends Fragment {
+    ProgressDialog progressDialog;
+    AdapterGridPoli adapterGridPoli;
+
     public static final String urlPoli = "http://192.168.11.212:8080/Poliklinik-v02-0.0.2/Poli/DataSemuaKlinik";
     List<DataPoli> itemPoli = new ArrayList<DataPoli>();
     RecyclerView rvPoli;
-    AdapterGridPoli adapterGridPoli;
 
     private static final String TAG = MainActivity.class.getSimpleName();
-
-    ProgressDialog progressDialog;
 
     public Poli() {
         // Required empty public constructor
     }
 
-
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View viewPoli = inflater.inflate(R.layout.fragment_poli, container, false);
@@ -66,13 +66,11 @@ public class Poli extends Fragment {
         return viewPoli;
     }
 
-
-
     private void dataPoli(){
         itemPoli.clear();
         progressDialog = new ProgressDialog(getActivity());
         progressDialog.setCancelable(false);
-        progressDialog.setMessage("Memuat Data Poli...");
+        progressDialog.setMessage("Memuat Data Poli. . .");
         progressDialog.show();
 
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(urlPoli, new Response.Listener<JSONArray>() {
@@ -83,6 +81,7 @@ public class Poli extends Fragment {
                 for (int i = 1; i < response.length(); i++) {
                     try {
                         JSONObject jsonObject = response.getJSONObject(i);
+
                         DataPoli dataPoli = new DataPoli();
 
                         dataPoli.setKeterangan(jsonObject.getString("keterangan"));
@@ -92,16 +91,17 @@ public class Poli extends Fragment {
                         dataPoli.setRuanganKlinik(jsonObject.getString("ruanganKlinik"));
 
                         itemPoli.add(dataPoli);
-
-                        rvPoli.setLayoutManager(new GridLayoutManager(getContext(), 2));
-                        adapterGridPoli = new AdapterGridPoli(getContext(), itemPoli);
-                        rvPoli.setAdapter(adapterGridPoli);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
+                    rvPoli.setLayoutManager(new GridLayoutManager(getContext(), 2));
+                    adapterGridPoli = new AdapterGridPoli(getContext(), itemPoli);
 
                     adapterGridPoli.notifyDataSetChanged();
+                    rvPoli.setAdapter(adapterGridPoli);
+
                     progressDialog.dismiss();
+
                 }
             }
         }, new Response.ErrorListener() {

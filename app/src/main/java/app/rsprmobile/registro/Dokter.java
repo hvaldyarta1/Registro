@@ -30,7 +30,6 @@ import java.util.List;
 import app.rsprmobile.registro.adapter.AdapterGridDokter;
 import app.rsprmobile.registro.app.AppController;
 import app.rsprmobile.registro.data.DataDokter;
-import app.rsprmobile.registro.utilitas.Server;
 
 
 /**
@@ -46,14 +45,13 @@ public class Dokter extends Fragment {
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
-
     public Dokter() {
         // Required empty public constructor
     }
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View viewDokter = inflater.inflate(R.layout.fragment_dokter, container, false);
