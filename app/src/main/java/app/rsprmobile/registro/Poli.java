@@ -61,6 +61,9 @@ public class Poli extends Fragment {
 
         rvPoli.setLayoutManager(new LinearLayoutManager(getActivity()));
 
+        rvPoli.setLayoutManager(new GridLayoutManager(getContext(), 2));
+        adapterGridPoli = new AdapterGridPoli(getContext(), itemPoli);
+
         dataPoli();
 
         return viewPoli;
@@ -94,8 +97,6 @@ public class Poli extends Fragment {
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                    rvPoli.setLayoutManager(new GridLayoutManager(getContext(), 2));
-                    adapterGridPoli = new AdapterGridPoli(getContext(), itemPoli);
 
                     adapterGridPoli.notifyDataSetChanged();
                     rvPoli.setAdapter(adapterGridPoli);

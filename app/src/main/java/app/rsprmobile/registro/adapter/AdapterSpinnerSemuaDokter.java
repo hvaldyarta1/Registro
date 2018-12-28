@@ -13,12 +13,12 @@ import java.util.List;
 import app.rsprmobile.registro.R;
 import app.rsprmobile.registro.data.DataDokter;
 
-public class AdapterSinnerSemuaDokter extends BaseAdapter {
+public class AdapterSpinnerSemuaDokter extends BaseAdapter {
     private Activity activity;
     private LayoutInflater inflater;
     private List<DataDokter> semuaDokter;
 
-    public AdapterSinnerSemuaDokter(Activity activity, List<DataDokter> semuaDokter){
+    public AdapterSpinnerSemuaDokter(Activity activity, List<DataDokter> semuaDokter){
         this.activity = activity;
         this.semuaDokter = semuaDokter;
     }

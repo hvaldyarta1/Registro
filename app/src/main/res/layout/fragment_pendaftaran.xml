@@ -54,19 +54,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/spinnerPoli" />
 
-        <!--<TextView
-        android:id="@+id/txtViewDokterDipilih"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
-        android:text="Nama Dokter"
-        android:visibility="visible"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinnerDokter" />-->
-
         <ListView
             android:id="@+id/listJadwal"
             android:layout_width="match_parent"
@@ -108,16 +95,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/listJadwal" />
 
-        <!--<TextView
-        android:id="@+id/textViewNomor"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="20dp"
-        android:text="Pilih Nomor"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinnerJamPraktek" />-->
-
         <Spinner
             android:id="@+id/spinnerPoli"
             android:layout_width="match_parent"
@@ -152,7 +129,7 @@
             android:layout_marginEnd="8dp"
             android:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintHorizontal_bias="0.965"
             app:layout_constraintStart_toEndOf="@+id/textView"
             app:layout_constraintTop_toBottomOf="@+id/textViewTanggal" />
 
@@ -161,10 +138,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="12dp"
             android:text="Jam Praktek"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView2" />
+            app:layout_constraintTop_toBottomOf="@+id/textViewTanggal" />
 
         <TextView
             android:id="@+id/textViewKuotaPerjam"
@@ -176,36 +153,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/txtKuotaMax" />
 
-        <!--<android.support.v7.widget.RecyclerView
-            android:id="@+id/rvButton"
-            android:layout_width="236dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="8dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textViewKuotaPerjam"
-            app:layout_constraintVertical_bias="1.0"
-            android:scrollbars="vertical"
-            android:scrollbarThumbVertical="@android:color/darker_gray"
-            android:scrollbarSize="4dp"/>-->
-
-        <!--<ListView
-            android:id="@+id/listRange"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="8dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/rvButton"
-            app:layout_constraintTop_toBottomOf="@+id/textViewKuotaPerjam" />-->
-
-
         <LinearLayout
             android:id="@+id/layoutHolder1"
             android:layout_width="0dp"
@@ -215,7 +162,7 @@
             android:layout_marginEnd="8dp"
             android:background="#95e26e"
             android:orientation="horizontal"
-            android:visibility="gone"
+            android:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textViewKuotaPerjam"
@@ -233,7 +180,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_weight="1"
-                android:text="TESTING"
+                android:text="RANGE"
                 android:textAlignment="center"
                 android:textSize="20sp" />
 
@@ -247,7 +194,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:orientation="horizontal"
-            android:visibility="gone"
+            android:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/layoutHolder1"
@@ -265,7 +212,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_weight="1"
-                android:text="TESTING"
+                android:text="RANGE"
                 android:textAlignment="center"
                 android:textSize="20sp" />
 
@@ -280,7 +227,7 @@
             android:layout_marginEnd="8dp"
             android:background="#95e26e"
             android:orientation="horizontal"
-            android:visibility="gone"
+            android:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/layoutHolder2"
@@ -298,7 +245,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_weight="1"
-                android:text="TESTING"
+                android:text="RANGE"
                 android:textAlignment="center"
                 android:textSize="20sp" />
 
@@ -312,7 +259,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:orientation="horizontal"
-            android:visibility="gone"
+            android:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/layoutHolder3"
@@ -330,7 +277,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_weight="1"
-                android:text="TESTING"
+                android:text="RANGE"
                 android:textAlignment="center"
                 android:textSize="20sp" />
 
@@ -345,7 +292,7 @@
             android:layout_marginEnd="8dp"
             android:background="#95e26e"
             android:orientation="horizontal"
-            android:visibility="gone"
+            android:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/layoutHolder4"
@@ -363,7 +310,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_weight="1"
-                android:text="TESTING"
+                android:text="RANGE"
                 android:textAlignment="center"
                 android:textSize="20sp" />
 
@@ -377,7 +324,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:orientation="horizontal"
-            android:visibility="gone"
+            android:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/layoutHolder5"
@@ -395,7 +342,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_weight="1"
-                android:text="TESTING"
+                android:text="RANGE"
                 android:textAlignment="center"
                 android:textSize="20sp" />
 
@@ -410,7 +357,7 @@
             android:layout_marginEnd="8dp"
             android:background="#95e26e"
             android:orientation="horizontal"
-            android:visibility="gone"
+            android:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/layoutHolder6"
@@ -428,7 +375,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_weight="1"
-                android:text="TESTING"
+                android:text="RANGE"
                 android:textAlignment="center"
                 android:textSize="20sp" />
 
@@ -442,7 +389,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:orientation="horizontal"
-            android:visibility="gone"
+            android:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/layoutHolder7"
@@ -460,7 +407,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_weight="1"
-                android:text="TESTING"
+                android:text="RANGE"
                 android:textAlignment="center"
                 android:textSize="20sp" />
 
@@ -475,7 +422,7 @@
             android:layout_marginEnd="8dp"
             android:background="#95e26e"
             android:orientation="horizontal"
-            android:visibility="gone"
+            android:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/layoutHolder8"
@@ -493,7 +440,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_weight="1"
-                android:text="TESTING"
+                android:text="RANGE"
                 android:textAlignment="center"
                 android:textSize="20sp" />
 
@@ -507,7 +454,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:orientation="horizontal"
-            android:visibility="gone"
+            android:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/layoutHolder9"
@@ -525,7 +472,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_weight="1"
-                android:text="TESTING"
+                android:text="RANGE"
                 android:textAlignment="center"
                 android:textSize="20sp" />
 
@@ -553,6 +500,16 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:text="Kuota Pasien"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txtTglPraktek" />
+
+        <TextView
+            android:id="@+id/txtTglPraktek"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="Tanggal Praktek"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/txtDokterPraktek" />
 

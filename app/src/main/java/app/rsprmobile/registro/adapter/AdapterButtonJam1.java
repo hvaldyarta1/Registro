@@ -32,6 +32,7 @@ import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -44,18 +45,20 @@ import app.rsprmobile.registro.R;
 import app.rsprmobile.registro.data.DataPoli;
 
 import static com.android.volley.VolleyLog.TAG;
+import static com.android.volley.VolleyLog.v;
 
 public class AdapterButtonJam1 extends RecyclerView.Adapter<AdapterButtonJam1.ViewHolder> {
     private Context context;
     private ArrayList<Integer> arrayJumlah;
+    private ArrayList<Integer> nomorDipakai;
     private int kuotaMax, kuotaPerjam;
     private String idKlinikDokter,idPasien, jaminan, tracer, tgl, statusPasien, tglDaftar, nomorAntri;
     private String range;
     private int noAntri;
 
     public AdapterButtonJam1(Context context, ArrayList<Integer> arrayJumlah, int kuotaMax, int kuotaPerjam,
-                              String idKlinikDokter, String idPasien, String jaminan, String tracer,
-                              String tgl, String statusPasien){
+                             String idKlinikDokter, String idPasien, String jaminan, String tracer,
+                             String tgl, String statusPasien, ArrayList<Integer> nomorDipakai){
         this.context = context;
         this.arrayJumlah = arrayJumlah;
         this.kuotaMax = kuotaMax;
@@ -66,6 +69,7 @@ public class AdapterButtonJam1 extends RecyclerView.Adapter<AdapterButtonJam1.Vi
         this.tracer = tracer;
         this.tgl = tgl;
         this.statusPasien = statusPasien;
+        this.nomorDipakai = nomorDipakai;
     }
 
 
@@ -80,6 +84,15 @@ public class AdapterButtonJam1 extends RecyclerView.Adapter<AdapterButtonJam1.Vi
     @Override
     public void onBindViewHolder(@NonNull final AdapterButtonJam1.ViewHolder viewHolder, final int position) {
         viewHolder.button.setText(String.valueOf(arrayJumlah.get(position).toString()));
+
+        for (int i=0; i < nomorDipakai.size(); i++){
+            if(arrayJumlah.contains(nomorDipakai.get(i))){
+                //do something for equals
+                if (viewHolder.button.getText().toString().equals(nomorDipakai.get(i).toString())){
+                    viewHolder.button.setEnabled(false);
+                }
+            }
+        }
 
         /*if (position < 2){
             viewHolder.button.setBackgroundResource(R.color.btnBPJS);
@@ -185,7 +198,6 @@ public class AdapterButtonJam1 extends RecyclerView.Adapter<AdapterButtonJam1.Vi
                                 break;
                             }
                         }
-
                     }
                 }
 
@@ -248,7 +260,7 @@ public class AdapterButtonJam1 extends RecyclerView.Adapter<AdapterButtonJam1.Vi
         }
 
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
-                "http://192.168.29.7:8888/PendaftaranV3/tambahKunjunganBpjsBaru", json,
+                "http://192.168.11.211:8080/PendaftaranV3/PendaftaranV3/tambahKunjunganBpjsBaru", json,
                 new Response.Listener<JSONObject>() {
 
                     @Override
@@ -260,6 +272,15 @@ public class AdapterButtonJam1 extends RecyclerView.Adapter<AdapterButtonJam1.Vi
                             } else {
                                 loading.dismiss();
                                 Toast.makeText(context, "Berhasil mendaftar no. Antri " + response.getString("noAntrian"), Toast.LENGTH_LONG).show();
+
+                                MainActivity mActivity = (MainActivity) context;
+                                FragmentManager fragmentManager = mActivity.getSupportFragmentManager();
+                                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+                                Histori histori = new Histori();
+
+                                fragmentTransaction.replace(R.id.fragment_container, histori);
+                                fragmentTransaction.commit();
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -311,7 +332,7 @@ public class AdapterButtonJam1 extends RecyclerView.Adapter<AdapterButtonJam1.Vi
         }
 
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
-                "http://192.168.29.7:8888/PendaftaranV3/tambahKunjunganBaru", json,
+                "http://192.168.11.211:8080/PendaftaranV3/PendaftaranV3/tambahKunjunganBaru", json,
                 new Response.Listener<JSONObject>() {
 
                     @Override
@@ -329,14 +350,14 @@ public class AdapterButtonJam1 extends RecyclerView.Adapter<AdapterButtonJam1.Vi
                                 bundlePendaftaran.putString("tanggalPeriksa", response.getString("tanggalPeriksa"));
                                 bundlePendaftaran.putString("jam", response.getString("jam"));*/
 
-                                /*MainActivity myActivity = (MainActivity) context;
-                                FragmentManager fragmentManager = myActivity.getSupportFragmentManager();
+                                MainActivity mActivity = (MainActivity) context;
+                                FragmentManager fragmentManager = mActivity.getSupportFragmentManager();
                                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
                                 Histori histori = new Histori();
 
                                 fragmentTransaction.replace(R.id.fragment_container, histori);
-                                fragmentTransaction.commit();*/
+                                fragmentTransaction.commit();
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();

@@ -39,6 +39,7 @@ import static com.android.volley.VolleyLog.TAG;
 public class AdapterButtonJam2 extends RecyclerView.Adapter<AdapterButtonJam2.ViewHolder> {
     private Context context;
     private ArrayList<Integer> arrayJumlah;
+    private ArrayList<Integer> nomorDipakai;
     private int kuotaMax, kuotaPerjam;
     private String idKlinikDokter,idPasien, jaminan, tracer, tgl, statusPasien, tglDaftar, nomorAntri;
     private String range;
@@ -46,7 +47,7 @@ public class AdapterButtonJam2 extends RecyclerView.Adapter<AdapterButtonJam2.Vi
 
     public AdapterButtonJam2(Context context, ArrayList<Integer> arrayJumlah, int kuotaMax, int kuotaPerjam,
                              String idKlinikDokter, String idPasien, String jaminan, String tracer,
-                             String tgl, String statusPasien){
+                             String tgl, String statusPasien, ArrayList<Integer> nomorDipakai){
         this.context = context;
         this.arrayJumlah = arrayJumlah;
         this.kuotaMax = kuotaMax;
@@ -57,6 +58,7 @@ public class AdapterButtonJam2 extends RecyclerView.Adapter<AdapterButtonJam2.Vi
         this.tracer = tracer;
         this.tgl = tgl;
         this.statusPasien = statusPasien;
+        this.nomorDipakai = nomorDipakai;
     }
 
 
@@ -71,6 +73,20 @@ public class AdapterButtonJam2 extends RecyclerView.Adapter<AdapterButtonJam2.Vi
     @Override
     public void onBindViewHolder(@NonNull final AdapterButtonJam2.ViewHolder viewHolder, final int position) {
         viewHolder.button.setText(String.valueOf(arrayJumlah.get(position).toString()));
+
+        for (int i=0; i < nomorDipakai.size(); i++){
+            if(arrayJumlah.contains(nomorDipakai.get(i))){
+                //do something for equals
+                if (viewHolder.button.getText().toString().equals(nomorDipakai.get(i).toString())){
+                    viewHolder.button.setEnabled(false);
+                }
+                //Toast.makeText(context, "Sudah dipakai", Toast.LENGTH_SHORT).show();
+            }/*else{
+                //do something for not equals
+                *//*int index = B_arraylist.indexOf(A_arraylist.get(i));
+                B_arraylist.remove(index);*//*
+            }*/
+        }
 
         viewHolder.button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -218,7 +234,7 @@ public class AdapterButtonJam2 extends RecyclerView.Adapter<AdapterButtonJam2.Vi
         }
 
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
-                "http://192.168.29.7:8888/PendaftaranV3/tambahKunjunganBpjsBaru", json,
+                "http://192.168.11.211:8080/PendaftaranV3/PendaftaranV3/tambahKunjunganBpjsBaru", json,
                 new Response.Listener<JSONObject>() {
 
                     @Override
@@ -285,7 +301,7 @@ public class AdapterButtonJam2 extends RecyclerView.Adapter<AdapterButtonJam2.Vi
         }
 
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
-                "http://192.168.29.7:8888/PendaftaranV3/tambahKunjunganBaru", json,
+                "http://192.168.11.211:8080/PendaftaranV3/PendaftaranV3/tambahKunjunganBaru", json,
                 new Response.Listener<JSONObject>() {
 
                     @Override

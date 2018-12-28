@@ -6,7 +6,6 @@ import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -41,14 +40,11 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
-import app.rsprmobile.registro.Captcha.TextCaptcha;
 import app.rsprmobile.registro.adapter.AdapterButtonJam1;
 import app.rsprmobile.registro.adapter.AdapterButtonJam10;
 import app.rsprmobile.registro.adapter.AdapterButtonJam2;
@@ -61,7 +57,7 @@ import app.rsprmobile.registro.adapter.AdapterButtonJam8;
 import app.rsprmobile.registro.adapter.AdapterButtonJam9;
 import app.rsprmobile.registro.adapter.AdapterJadwal;
 import app.rsprmobile.registro.adapter.AdapterJadwalPoli;
-import app.rsprmobile.registro.adapter.AdapterSinnerSemuaDokter;
+import app.rsprmobile.registro.adapter.AdapterSpinnerSemuaDokter;
 import app.rsprmobile.registro.adapter.AdapterSpinnerDokterPoli;
 import app.rsprmobile.registro.adapter.AdapterSpinnerPoli;
 import app.rsprmobile.registro.app.AppController;
@@ -86,8 +82,6 @@ public class Pendaftaran extends Fragment implements AdapterView.OnItemClickList
 
     ProgressDialog progressDialog;
 
-    int mKuotaPasien;
-
     private Button btnTanggal;
     private TextView textTanggalDipilih;
     private DatePickerDialog datePickerDialog;
@@ -96,10 +90,9 @@ public class Pendaftaran extends Fragment implements AdapterView.OnItemClickList
     Spinner spinnerPenjamin, spinnerJenis, spinnerPoli, spinnerDokter, spinnerJamPraktek;
     AdapterSpinnerPoli adapterSpinnerPoli;
     AdapterSpinnerDokterPoli adapterSpinnerDokter;
-    AdapterSinnerSemuaDokter adapterSinnerSemuaDokter;
+    AdapterSpinnerSemuaDokter adapterSpinnerSemuaDokter;
     AdapterJadwal adapterJadwal;
     AdapterJadwalPoli adapterJadwalPoli;
-    //AdapterSpinnerJamPraktek adapterSpinnerJamPraktek;
     ArrayAdapter<String> adapterJamPraktek;
     List<DataDokter> semuaDokter = new ArrayList<DataDokter>();
     List<DataDokterPoli> dokterPoli = new ArrayList<DataDokterPoli>();
@@ -107,10 +100,8 @@ public class Pendaftaran extends Fragment implements AdapterView.OnItemClickList
     List<DataJadwal> jadwalSemuaDokter = new ArrayList<DataJadwal>();
     List<DataJadwalPoli> jadwalDokterPoli = new ArrayList<DataJadwalPoli>();
     List<DataKlinik> itemDataKlinik = new ArrayList<DataKlinik>();
-    //List<DataNomorAntrianDipakai> nomorAntrianDipakai = new ArrayList<>();
 
     ArrayList<String> arJamPraktek = new ArrayList<String>(); //rev Spinner item
-    //ArrayList<Integer> arrayKuota = new ArrayList<Integer>(); //array Kuota Pasien
     ArrayList<Integer> nomorDipakai = new ArrayList<Integer>(); //noAntrian Dipakai
 
     public final String urlJamPraktek = "http://192.168.11.213:8080/jadwaldokter-v04-0.0.1/Jadwal/JadwalDokterDenganidKlinikidDokteridTanggal/";
@@ -120,21 +111,16 @@ public class Pendaftaran extends Fragment implements AdapterView.OnItemClickList
 
     ListView listJadwalDokter;
 
-    TextView txtKuotaMax, txtDokterPraktek;
-
     Bundle bundle;
 
     SharedPreferences sharedPreferences;
     String jaminan, iddokter, klinikid, tgl, idPasien,
-            idKlinikDokter, namaKlinik, statusPasien, tracer, tglHariIni, dokter;
+            idKlinikDokter, namaKlinik, statusPasien, tracer, tglDipilih, tglHariIni, dokter;
 
     public String noAntrian;
 
-    RecyclerView rvButtonNomor;
-
     private int i, kuotapasien, kuotaperjam;
-    TextView textViewKuotaPerjam;
-    int txtKuotaPerjam;
+    TextView txtTglPraktek, textViewKuotaPerjam, txtKuotaMax, txtDokterPraktek;
 
     // Modifikasi
     LinearLayout holder1, holder2, holder3, holder4, holder5,
@@ -218,12 +204,11 @@ public class Pendaftaran extends Fragment implements AdapterView.OnItemClickList
         txtRange9 = viewPendaftaran.findViewById(R.id.txtRange9);
         txtRange10 = viewPendaftaran.findViewById(R.id.txtRange10);
 
+        textTanggalDipilih =(TextView) viewPendaftaran.findViewById(R.id.textViewTanggal);
         txtDokterPraktek = viewPendaftaran.findViewById(R.id.txtDokterPraktek);
-        txtDokterPraktek.setVisibility(View.GONE);
+        txtTglPraktek = viewPendaftaran.findViewById(R.id.txtTglPraktek);
         txtKuotaMax = viewPendaftaran.findViewById(R.id.txtKuotaMax);
-        txtKuotaMax.setVisibility(View.GONE);
         textViewKuotaPerjam = (TextView) viewPendaftaran.findViewById(R.id.textViewKuotaPerjam);
-        textViewKuotaPerjam.setVisibility(View.GONE);
 
         spinnerPenjamin = (Spinner) viewPendaftaran.findViewById(R.id.spinnerJaminan);
         final ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(Objects.requireNonNull(getActivity()), R.array.penjamin, android.R.layout.simple_spinner_item);
@@ -247,6 +232,8 @@ public class Pendaftaran extends Fragment implements AdapterView.OnItemClickList
         adapterJamPraktek = new ArrayAdapter<String>(getActivity(),
                 android.R.layout.simple_spinner_dropdown_item,
                 arJamPraktek);
+
+        visibilityGone();
 
         listJadwalDokter = (ListView) viewPendaftaran.findViewById(R.id.listJadwal);
         listJadwalDokter.setOnTouchListener(new View.OnTouchListener() { //Scrollable list view dlm ScrollView
@@ -299,6 +286,10 @@ public class Pendaftaran extends Fragment implements AdapterView.OnItemClickList
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String jenis = spinnerJenis.getSelectedItem().toString();
+                jadwalSemuaDokter.clear();
+                jadwalDokterPoli.clear();
+                spinnerPenjamin.setEnabled(false);
+                visibilityGone(); //menyembunyikan bagian nomor antrian
 
                 if (jenis.trim().equals("Poli")){
                     spinnerPoli.setVisibility(View.VISIBLE);
@@ -307,10 +298,11 @@ public class Pendaftaran extends Fragment implements AdapterView.OnItemClickList
                 } else if (jenis.trim().equals("Dokter")){
                     spinnerDokter.setVisibility(View.VISIBLE);
                     spinnerPoli.setVisibility(View.GONE);
-                    adapterSinnerSemuaDokter = new AdapterSinnerSemuaDokter(getActivity(), semuaDokter);
-                    spinnerDokter.setAdapter(adapterSinnerSemuaDokter);
-
                     dataDokter();
+
+                    adapterSpinnerSemuaDokter = new AdapterSpinnerSemuaDokter(getActivity(), semuaDokter);
+                    //spinnerDokter.setAdapter(adapterSpinnerSemuaDokter);
+
                 }
             }
 
@@ -324,6 +316,11 @@ public class Pendaftaran extends Fragment implements AdapterView.OnItemClickList
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 //statusPasien = poli.get(position).getNamaKlinik();
+                spinnerJamPraktek.setVisibility(View.GONE);
+                textTanggalDipilih.setVisibility(View.GONE);
+                jadwalSemuaDokter.clear();
+                jadwalDokterPoli.clear();
+                visibilityGone(); //menyembunyikan bagian nomor antrian
 
                 if (spinnerPoli.getSelectedItem() == "--Pilih Klinik--"){
                     spinnerDokter.setVisibility(View.GONE);
@@ -350,6 +347,10 @@ public class Pendaftaran extends Fragment implements AdapterView.OnItemClickList
         spinnerDokter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                spinnerJamPraktek.setVisibility(View.GONE);
+                textTanggalDipilih.setVisibility(View.GONE);
+                visibilityGone(); //menyembunyikan bagian nomor antrian
+
                 if (spinnerDokter.getAdapter() == adapterSpinnerDokter){ //Dokter Poli
                     statusPasien = dokterPoli.get(position).getNamaDokterTetap();
                     dokter = dokterPoli.get(position).getNamaDokterTetap();
@@ -361,7 +362,7 @@ public class Pendaftaran extends Fragment implements AdapterView.OnItemClickList
                     listJadwalDokter.setAdapter(adapterJadwalPoli);
                     btnTanggal.setEnabled(true);
 
-                } else if (spinnerDokter.getAdapter() == adapterSinnerSemuaDokter){ //Semua Dokter
+                } else if (spinnerDokter.getAdapter() == adapterSpinnerSemuaDokter){ //Semua Dokter
                     dokter = semuaDokter.get(position).getNamaDokter();
                     iddokter = semuaDokter.get(position).getDokterId();
                     statusPasien = semuaDokter.get(position).getNamaDokter();
@@ -383,6 +384,7 @@ public class Pendaftaran extends Fragment implements AdapterView.OnItemClickList
         spinnerJamPraktek.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                visibilityGone(); //menyembunyikan bagian nomor antrian
 
                 if (!spinnerJamPraktek.getSelectedItem().toString().equals("-- Pilih Jam Praktek --") &&
                         !spinnerJamPraktek.getSelectedItem().toString().equals("Tidak Praktek")){
@@ -402,7 +404,7 @@ public class Pendaftaran extends Fragment implements AdapterView.OnItemClickList
 
 
                     String[] jamakhir = jam2.split(":");
-                    String jamselesai1 = jamakhir[0]; String nmrAkhir = String.valueOf(kuotapasien);
+                    String jamselesai1 = jamakhir[0]; //String nmrAkhir = String.valueOf(kuotapasien);
                     String jamselesai2 = jamakhir[1];
 
                     int jamp1 = Integer.parseInt(jamawal1);
@@ -474,16 +476,7 @@ public class Pendaftaran extends Fragment implements AdapterView.OnItemClickList
                     arrayKuota9.clear();
                     arrayKuota10.clear();
 
-                    holder1.setVisibility(View.GONE);
-                    holder2.setVisibility(View.GONE);
-                    holder3.setVisibility(View.GONE);
-                    holder4.setVisibility(View.GONE);
-                    holder5.setVisibility(View.GONE);
-                    holder6.setVisibility(View.GONE);
-                    holder7.setVisibility(View.GONE);
-                    holder8.setVisibility(View.GONE);
-                    holder9.setVisibility(View.GONE);
-                    holder10.setVisibility(View.GONE);
+                    visibilityGone();
 
                     if (arrayrange.size() == 1){
                         txtRange1.setText(arrayrange.get(0));
@@ -549,12 +542,15 @@ public class Pendaftaran extends Fragment implements AdapterView.OnItemClickList
                         txtRange7.setText(arrayrange.get(6));
                         txtRange8.setText(arrayrange.get(7));
                         txtRange9.setText(arrayrange.get(8));
-                        txtRange1.setText(arrayrange.get(10));
+                        txtRange10.setText(arrayrange.get(10));
                     }
 
                     //Toast.makeText(getActivity(), idKlinikDokter, Toast.LENGTH_SHORT).show();
                     txtDokterPraktek.setVisibility(View.VISIBLE);
                     txtDokterPraktek.setText(dokter);
+
+                    txtTglPraktek.setVisibility(View.VISIBLE);
+                    txtTglPraktek.setText("Tanggal Praktek: " + tglDipilih);
 
                 }
             }
@@ -569,7 +565,6 @@ public class Pendaftaran extends Fragment implements AdapterView.OnItemClickList
         dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
         formatTanggal = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
 
-        textTanggalDipilih =(TextView) viewPendaftaran.findViewById(R.id.textViewTanggal);
         btnTanggal = (Button) viewPendaftaran.findViewById(R.id.buttonTanggal);
         btnTanggal.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -580,6 +575,24 @@ public class Pendaftaran extends Fragment implements AdapterView.OnItemClickList
         //---------------
 
         return viewPendaftaran;
+    }
+
+    private void visibilityGone() {
+        textViewKuotaPerjam.setVisibility(View.GONE);
+        txtDokterPraktek.setVisibility(View.GONE);
+        txtTglPraktek.setVisibility(View.GONE);
+        txtKuotaMax.setVisibility(View.GONE);
+
+        holder1.setVisibility(View.GONE);
+        holder2.setVisibility(View.GONE);
+        holder3.setVisibility(View.GONE);
+        holder4.setVisibility(View.GONE);
+        holder5.setVisibility(View.GONE);
+        holder6.setVisibility(View.GONE);
+        holder7.setVisibility(View.GONE);
+        holder8.setVisibility(View.GONE);
+        holder9.setVisibility(View.GONE);
+        holder10.setVisibility(View.GONE);
     }
 
     private void dataKlinik(String tanggalJadwal, String idDokter, String idKlinik, String waktuAwal){
@@ -634,43 +647,43 @@ public class Pendaftaran extends Fragment implements AdapterView.OnItemClickList
                 dataNomorDipakai(/*"58", "2018-12-05"*/idKlinikDokter, tgl);
 
                 adapterButtonJam1 = new AdapterButtonJam1(getActivity(), arrayKuota1, kuotapasien, kuotaperjam, idKlinikDokter,
-                        idPasien, jaminan, tracer, tgl, statusPasien);
+                        idPasien, jaminan, tracer, tgl, statusPasien, nomorDipakai);
                 rvBtnAntri1.setLayoutManager(new GridLayoutManager(getActivity(),5));
 
                 adapterButtonJam2 = new AdapterButtonJam2(getActivity(), arrayKuota2, kuotapasien, kuotaperjam, idKlinikDokter,
-                        idPasien, jaminan, tracer, tgl, statusPasien);
+                        idPasien, jaminan, tracer, tgl, statusPasien, nomorDipakai);
                 rvBtnAntri2.setLayoutManager(new GridLayoutManager(getActivity(),5));
 
                 adapterButtonJam3 = new AdapterButtonJam3(getActivity(), arrayKuota3, kuotapasien, kuotaperjam, idKlinikDokter,
-                        idPasien, jaminan, tracer, tgl, statusPasien);
+                        idPasien, jaminan, tracer, tgl, statusPasien, nomorDipakai);
                 rvBtnAntri3.setLayoutManager(new GridLayoutManager(getActivity(),5));
 
                 adapterButtonJam4 = new AdapterButtonJam4(getActivity(), arrayKuota4, kuotapasien, kuotaperjam, idKlinikDokter,
-                        idPasien, jaminan, tracer, tgl, statusPasien);
+                        idPasien, jaminan, tracer, tgl, statusPasien, nomorDipakai);
                 rvBtnAntri4.setLayoutManager(new GridLayoutManager(getActivity(),5));
 
                 adapterButtonJam5 = new AdapterButtonJam5(getActivity(), arrayKuota5, kuotapasien, kuotaperjam, idKlinikDokter,
-                        idPasien, jaminan, tracer, tgl, statusPasien);
+                        idPasien, jaminan, tracer, tgl, statusPasien, nomorDipakai);
                 rvBtnAntri5.setLayoutManager(new GridLayoutManager(getActivity(),5));
 
                 adapterButtonJam6 = new AdapterButtonJam6(getActivity(), arrayKuota6, kuotapasien, kuotaperjam, idKlinikDokter,
-                        idPasien, jaminan, tracer, tgl, statusPasien);
+                        idPasien, jaminan, tracer, tgl, statusPasien, nomorDipakai);
                 rvBtnAntri6.setLayoutManager(new GridLayoutManager(getActivity(),5));
 
                 adapterButtonJam7 = new AdapterButtonJam7(getActivity(), arrayKuota7, kuotapasien, kuotaperjam, idKlinikDokter,
-                        idPasien, jaminan, tracer, tgl, statusPasien);
+                        idPasien, jaminan, tracer, tgl, statusPasien, nomorDipakai);
                 rvBtnAntri7.setLayoutManager(new GridLayoutManager(getActivity(),5));
 
                 adapterButtonJam8 = new AdapterButtonJam8(getActivity(), arrayKuota8, kuotapasien, kuotaperjam, idKlinikDokter,
-                        idPasien, jaminan, tracer, tgl, statusPasien);
+                        idPasien, jaminan, tracer, tgl, statusPasien, nomorDipakai);
                 rvBtnAntri8.setLayoutManager(new GridLayoutManager(getActivity(),5));
 
                 adapterButtonJam9 = new AdapterButtonJam9(getActivity(), arrayKuota9, kuotapasien, kuotaperjam, idKlinikDokter,
-                        idPasien, jaminan, tracer, tgl, statusPasien);
+                        idPasien, jaminan, tracer, tgl, statusPasien, nomorDipakai);
                 rvBtnAntri9.setLayoutManager(new GridLayoutManager(getActivity(),5));
 
                 adapterButtonJam10 = new AdapterButtonJam10(getActivity(), arrayKuota10, kuotapasien, kuotaperjam, idKlinikDokter,
-                        idPasien, jaminan, tracer, tgl, statusPasien);
+                        idPasien, jaminan, tracer, tgl, statusPasien, nomorDipakai);
                 rvBtnAntri10.setLayoutManager(new GridLayoutManager(getActivity(),5));
 
                 String txtKuotaPerjam = String.valueOf(kuotaperjam);
@@ -717,7 +730,7 @@ public class Pendaftaran extends Fragment implements AdapterView.OnItemClickList
 
                     for (i = 1; i <= kuotaperjam; i++){
                         arrayKuota1.add(i);
-                        arrayKuota1.removeAll(nomorDipakai);
+                        //arrayKuota1.removeAll(nomorDipakai);
                     }
                 } else if (sesi==2){
                     holder1.setVisibility(View.VISIBLE);
@@ -725,7 +738,7 @@ public class Pendaftaran extends Fragment implements AdapterView.OnItemClickList
 
                     for (i = 1; i <= kuotaperjam; i++){
                         arrayKuota1.add(i);
-                        arrayKuota1.removeAll(nomorDipakai);
+                        //arrayKuota1.removeAll(nomorDipakai);
                     }
 
                     for (int a = kuotaperjam+1; a <= kuotaperjam * 2; a++){
@@ -738,15 +751,17 @@ public class Pendaftaran extends Fragment implements AdapterView.OnItemClickList
 
                     for (i = 1; i <= kuotaperjam; i++){
                         arrayKuota1.add(i);
-                        arrayKuota1.removeAll(nomorDipakai);
+                        //arrayKuota1.removeAll(nomorDipakai);
                     }
 
                     for (int a = kuotaperjam+1; a <= kuotaperjam * 2; a++){
                         arrayKuota2.add(a);
+                        //arrayKuota2.removeAll(nomorDipakai);
                     }
 
                     for (int b = kuotaperjam* 2 + 1; b <= kuotaperjam * 3; b++){
                         arrayKuota3.add(b);
+                        //arrayKuota2.removeAll(nomorDipakai);
                     }
                 } else if (sesi==4){
                     holder1.setVisibility(View.VISIBLE);
@@ -756,22 +771,22 @@ public class Pendaftaran extends Fragment implements AdapterView.OnItemClickList
 
                     for (i = 1; i <= kuotaperjam; i++){
                         arrayKuota1.add(i);
-                        arrayKuota1.removeAll(nomorDipakai);
+                        //arrayKuota1.removeAll(nomorDipakai);
                     }
 
                     for (int a = kuotaperjam+1; a <= kuotaperjam * 2; a++){
                         arrayKuota2.add(a);
-                        arrayKuota2.removeAll(nomorDipakai);
+                        //arrayKuota2.removeAll(nomorDipakai);
                     }
 
                     for (int b = kuotaperjam * 2 + 1; b <= kuotaperjam * 3; b++){
                         arrayKuota3.add(b);
-                        arrayKuota3.removeAll(nomorDipakai);
+                        //arrayKuota3.removeAll(nomorDipakai);
                     }
 
                     for (int c = kuotaperjam * 3 + 1; c <= kuotaperjam * 4; c++){
                         arrayKuota4.add(c);
-                        arrayKuota4.removeAll(nomorDipakai);
+                        //arrayKuota4.removeAll(nomorDipakai);
                     }
                 } else if (sesi==5){
                     holder1.setVisibility(View.VISIBLE);
@@ -782,7 +797,7 @@ public class Pendaftaran extends Fragment implements AdapterView.OnItemClickList
 
                     for (i = 1; i <= kuotaperjam; i++){
                         arrayKuota1.add(i);
-                        arrayKuota1.removeAll(nomorDipakai);
+                        //arrayKuota1.removeAll(nomorDipakai);
                     }
 
                     for (int a = kuotaperjam+1; a <= kuotaperjam * 2; a++){
@@ -792,17 +807,17 @@ public class Pendaftaran extends Fragment implements AdapterView.OnItemClickList
 
                     for (int b = kuotaperjam * 2 + 1; b <= kuotaperjam * 3; b++){
                         arrayKuota3.add(b);
-                        arrayKuota3.removeAll(nomorDipakai);
+                        //arrayKuota3.removeAll(nomorDipakai);
                     }
 
                     for (int c = kuotaperjam * 3 + 1; c <= kuotaperjam * 4; c++){
                         arrayKuota4.add(c);
-                        arrayKuota4.removeAll(nomorDipakai);
+                        //arrayKuota4.removeAll(nomorDipakai);
                     }
 
                     for (int d = kuotaperjam * 4 + 1; d <= kuotaperjam * 5; d++){
                         arrayKuota5.add(d);
-                        arrayKuota5.removeAll(nomorDipakai);
+                        //arrayKuota5.removeAll(nomorDipakai);
                     }
                 } else if (sesi==6){
                     holder1.setVisibility(View.VISIBLE);
@@ -814,32 +829,32 @@ public class Pendaftaran extends Fragment implements AdapterView.OnItemClickList
 
                     for (i = 1; i <= kuotaperjam; i++){
                         arrayKuota1.add(i);
-                        arrayKuota1.removeAll(nomorDipakai);
+                        //arrayKuota1.removeAll(nomorDipakai);
                     }
 
                     for (int a = kuotaperjam+1; a <= kuotaperjam * 2; a++){
                         arrayKuota2.add(a);
-                        arrayKuota2.removeAll(nomorDipakai);
+                        //arrayKuota2.removeAll(nomorDipakai);
                     }
 
                     for (int b = kuotaperjam * 2 + 1; b <= kuotaperjam * 3; b++){
                         arrayKuota3.add(b);
-                        arrayKuota3.removeAll(nomorDipakai);
+                        //arrayKuota3.removeAll(nomorDipakai);
                     }
 
                     for (int c = kuotaperjam * 3 + 1; c <= kuotaperjam * 4; c++){
                         arrayKuota4.add(c);
-                        arrayKuota4.removeAll(nomorDipakai);
+                        //arrayKuota4.removeAll(nomorDipakai);
                     }
 
                     for (int d = kuotaperjam * 4 + 1; d <= kuotaperjam * 5; d++){
                         arrayKuota5.add(d);
-                        arrayKuota5.removeAll(nomorDipakai);
+                        //arrayKuota5.removeAll(nomorDipakai);
                     }
 
                     for (int e = kuotaperjam * 5 + 1; e <= kuotaperjam * 6; e++ ){
                         arrayKuota6.add(e);
-                        arrayKuota6.removeAll(nomorDipakai);
+                        //arrayKuota6.removeAll(nomorDipakai);
                     }
                 } else if (sesi==7){
                     holder1.setVisibility(View.VISIBLE);
@@ -852,37 +867,37 @@ public class Pendaftaran extends Fragment implements AdapterView.OnItemClickList
 
                     for (i = 1; i <= kuotaperjam; i++){
                         arrayKuota1.add(i);
-                        arrayKuota1.removeAll(nomorDipakai);
+                        //arrayKuota1.removeAll(nomorDipakai);
                     }
 
                     for (int a = kuotaperjam+1; a <= kuotaperjam * 2; a++){
                         arrayKuota2.add(a);
-                        arrayKuota2.removeAll(nomorDipakai);
+                        //arrayKuota2.removeAll(nomorDipakai);
                     }
 
                     for (int b = kuotaperjam * 2 + 1; b <= kuotaperjam * 3; b++){
                         arrayKuota3.add(b);
-                        arrayKuota3.removeAll(nomorDipakai);
+                        //arrayKuota3.removeAll(nomorDipakai);
                     }
 
                     for (int c = kuotaperjam * 3 + 1; c <= kuotaperjam * 4; c++){
                         arrayKuota4.add(c);
-                        arrayKuota4.removeAll(nomorDipakai);
+                        //arrayKuota4.removeAll(nomorDipakai);
                     }
 
                     for (int d = kuotaperjam * 4 + 1; d <= kuotaperjam * 5; d++){
                         arrayKuota5.add(d);
-                        arrayKuota5.removeAll(nomorDipakai);
+                        //arrayKuota5.removeAll(nomorDipakai);
                     }
 
                     for (int e = kuotaperjam * 5 + 1; e <= kuotaperjam * 6; e++ ){
                         arrayKuota6.add(e);
-                        arrayKuota6.removeAll(nomorDipakai);
+                        //arrayKuota6.removeAll(nomorDipakai);
                     }
 
                     for (int f = kuotaperjam * 6 + 1; f <= kuotaperjam * 7; f++){
                         arrayKuota7.add(f);
-                        arrayKuota7.removeAll(nomorDipakai);
+                        //arrayKuota7.removeAll(nomorDipakai);
                     }
                 } else if (sesi==8){
                     holder1.setVisibility(View.VISIBLE);
@@ -896,42 +911,42 @@ public class Pendaftaran extends Fragment implements AdapterView.OnItemClickList
 
                     for (i = 1; i <= kuotaperjam; i++){
                         arrayKuota1.add(i);
-                        arrayKuota1.removeAll(nomorDipakai);
+                        //arrayKuota1.removeAll(nomorDipakai);
                     }
 
                     for (int a = kuotaperjam+1; a <= kuotaperjam * 2; a++){
                         arrayKuota2.add(a);
-                        arrayKuota2.removeAll(nomorDipakai);
+                        //arrayKuota2.removeAll(nomorDipakai);
                     }
 
                     for (int b = kuotaperjam * 2 + 1; b <= kuotaperjam * 3; b++){
                         arrayKuota3.add(b);
-                        arrayKuota3.removeAll(nomorDipakai);
+                        //arrayKuota3.removeAll(nomorDipakai);
                     }
 
                     for (int c = kuotaperjam * 3 + 1; c <= kuotaperjam * 4; c++){
                         arrayKuota4.add(c);
-                        arrayKuota4.removeAll(nomorDipakai);
+                        //arrayKuota4.removeAll(nomorDipakai);
                     }
 
                     for (int d = kuotaperjam * 4 + 1; d <= kuotaperjam * 5; d++){
                         arrayKuota5.add(d);
-                        arrayKuota5.removeAll(nomorDipakai);
+                        //arrayKuota5.removeAll(nomorDipakai);
                     }
 
                     for (int e = kuotaperjam * 5 + 1; e <= kuotaperjam * 6; e++ ){
                         arrayKuota6.add(e);
-                        arrayKuota6.removeAll(nomorDipakai);
+                        //arrayKuota6.removeAll(nomorDipakai);
                     }
 
                     for (int f = kuotaperjam * 6 + 1; f <= kuotaperjam * 7; f++){
                         arrayKuota7.add(f);
-                        arrayKuota7.removeAll(nomorDipakai);
+                        //arrayKuota7.removeAll(nomorDipakai);
                     }
 
                     for (int g = kuotaperjam * 7 + 1; g <= kuotaperjam *8; g++){
                         arrayKuota8.add(g);
-                        arrayKuota8.removeAll(nomorDipakai);
+                        //arrayKuota8.removeAll(nomorDipakai);
                     }
                 } else if (sesi==9){
                     holder1.setVisibility(View.VISIBLE);
@@ -946,27 +961,27 @@ public class Pendaftaran extends Fragment implements AdapterView.OnItemClickList
 
                     for (i = 1; i <= kuotaperjam; i++){
                         arrayKuota1.add(i);
-                        arrayKuota1.removeAll(nomorDipakai);
+                        //arrayKuota1.removeAll(nomorDipakai);
                     }
 
                     for (int a = kuotaperjam+1; a <= kuotaperjam * 2; a++){
                         arrayKuota2.add(a);
-                        arrayKuota2.removeAll(nomorDipakai);
+                        //arrayKuota2.removeAll(nomorDipakai);
                     }
 
                     for (int b = kuotaperjam * 2 + 1; b <= kuotaperjam * 3; b++){
                         arrayKuota3.add(b);
-                        arrayKuota3.removeAll(nomorDipakai);
+                        //arrayKuota3.removeAll(nomorDipakai);
                     }
 
                     for (int c = kuotaperjam * 3 + 1; c <= kuotaperjam * 4; c++){
                         arrayKuota4.add(c);
-                        arrayKuota4.removeAll(nomorDipakai);
+                        //arrayKuota4.removeAll(nomorDipakai);
                     }
 
                     for (int d = kuotaperjam * 4 + 1; d <= kuotaperjam * 5; d++){
                         arrayKuota5.add(d);
-                        arrayKuota5.removeAll(nomorDipakai);
+                        //arrayKuota5.removeAll(nomorDipakai);
                     }
 
                     for (int e = kuotaperjam * 5 + 1; e <= kuotaperjam * 6; e++ ){
@@ -976,17 +991,17 @@ public class Pendaftaran extends Fragment implements AdapterView.OnItemClickList
 
                     for (int f = kuotaperjam * 6 + 1; f <= kuotaperjam * 7; f++){
                         arrayKuota7.add(f);
-                        arrayKuota7.removeAll(nomorDipakai);
+                        //arrayKuota7.removeAll(nomorDipakai);
                     }
 
                     for (int g = kuotaperjam * 7 + 1; g <= kuotaperjam * 8; g++){
                         arrayKuota8.add(g);
-                        arrayKuota8.removeAll(nomorDipakai);
+                        //arrayKuota8.removeAll(nomorDipakai);
                     }
 
                     for (int h = kuotaperjam * 8 + 1; h <= kuotaperjam * 9; h++){
                         arrayKuota9.add(h);
-                        arrayKuota9.removeAll(nomorDipakai);
+                        //arrayKuota9.removeAll(nomorDipakai);
                     }
                 } else if (sesi==10){
                     holder1.setVisibility(View.VISIBLE);
@@ -1002,52 +1017,52 @@ public class Pendaftaran extends Fragment implements AdapterView.OnItemClickList
 
                     for (i = 1; i <= kuotaperjam; i++){
                         arrayKuota1.add(i);
-                        arrayKuota1.removeAll(nomorDipakai);
+                        //arrayKuota1.removeAll(nomorDipakai);
                     }
 
                     for (int a = kuotaperjam+1; a <= kuotaperjam * 2; a++){
                         arrayKuota2.add(a);
-                        arrayKuota2.removeAll(nomorDipakai);
+                        //arrayKuota2.removeAll(nomorDipakai);
                     }
 
                     for (int b = kuotaperjam * 2 + 1; b <= kuotaperjam * 3; b++){
                         arrayKuota3.add(b);
-                        arrayKuota3.removeAll(nomorDipakai);
+                        //arrayKuota3.removeAll(nomorDipakai);
                     }
 
                     for (int c = kuotaperjam * 3 + 1; c <= kuotaperjam * 4; c++){
                         arrayKuota4.add(c);
-                        arrayKuota4.removeAll(nomorDipakai);
+                        //arrayKuota4.removeAll(nomorDipakai);
                     }
 
                     for (int d = kuotaperjam * 4 + 1; d <= kuotaperjam * 5; d++){
                         arrayKuota5.add(d);
-                        arrayKuota5.removeAll(nomorDipakai);
+                        //arrayKuota5.removeAll(nomorDipakai);
                     }
 
                     for (int e = kuotaperjam * 5 + 1; e <= kuotaperjam * 6; e++ ){
                         arrayKuota6.add(e);
-                        arrayKuota6.removeAll(nomorDipakai);
+                        //arrayKuota6.removeAll(nomorDipakai);
                     }
 
                     for (int f = kuotaperjam * 6 + 1; f <= kuotaperjam * 7; f++){
                         arrayKuota7.add(f);
-                        arrayKuota7.removeAll(nomorDipakai);
+                        //arrayKuota7.removeAll(nomorDipakai);
                     }
 
                     for (int g = kuotaperjam * 7 + 1; g <= kuotaperjam * 8; g++){
                         arrayKuota8.add(g);
-                        arrayKuota8.removeAll(nomorDipakai);
+                        //arrayKuota8.removeAll(nomorDipakai);
                     }
 
                     for (int h = kuotaperjam * 8 + 1; h <= kuotaperjam * 9; h++){
                         arrayKuota9.add(h);
-                        arrayKuota9.removeAll(nomorDipakai);
+                        //arrayKuota9.removeAll(nomorDipakai);
                     }
 
                     for (int j = kuotaperjam * 9 + 1; j <= kuotaperjam *10; j++){
                         arrayKuota10.add(i);
-                        arrayKuota10.removeAll(nomorDipakai);
+                        //arrayKuota10.removeAll(nomorDipakai);
                     }
                 }
 
@@ -1195,7 +1210,11 @@ public class Pendaftaran extends Fragment implements AdapterView.OnItemClickList
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                    adapterSinnerSemuaDokter.notifyDataSetChanged();
+
+                    adapterSpinnerSemuaDokter.notifyDataSetChanged();
+
+                    spinnerDokter.setAdapter(adapterSpinnerSemuaDokter);
+
                     progressDialog.dismiss();
 
                 }
@@ -1423,8 +1442,12 @@ public class Pendaftaran extends Fragment implements AdapterView.OnItemClickList
                 Calendar newDate = Calendar.getInstance();
                 newDate.set(year, monthOfYear, dayOfMonth);
 
-                textTanggalDipilih.setText("Tanggal dipilih: " + dateFormat.format(newDate.getTime()));
+                tglDipilih = dateFormat.format(newDate.getTime());
+                textTanggalDipilih.setVisibility(View.VISIBLE);
+                textTanggalDipilih.setText("Tanggal dipilih: " + tglDipilih);
                 tgl = formatTanggal.format(newDate.getTime());
+
+                spinnerJamPraktek.setVisibility(View.VISIBLE);
                 spinnerJamPraktek.setAdapter(adapterJamPraktek);
 
                 Date todayDate = Calendar.getInstance().getTime();
@@ -1435,7 +1458,7 @@ public class Pendaftaran extends Fragment implements AdapterView.OnItemClickList
 
                     try {
                         if (new SimpleDateFormat("yyyy-MM-dd").parse(tgl).before(new SimpleDateFormat("yyyy-MM-dd").parse(tglHariIni))) {
-                            Toast.makeText(getActivity(), "Tanggal Sudah lewat", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getActivity(), "Tanggal Sudah Lewat", Toast.LENGTH_LONG).show();
                         } else {
                             jamPraktekTanggalDokter(tgl, iddokter);
                             //spinnerJamPraktek.setVisibility(View.VISIBLE);
@@ -1447,7 +1470,7 @@ public class Pendaftaran extends Fragment implements AdapterView.OnItemClickList
                 } else {
                     try {
                         if (new SimpleDateFormat("yyyy-MM-dd").parse(tgl).before(new SimpleDateFormat("yyyy-MM-dd").parse(tglHariIni))) {
-                            Toast.makeText(getActivity(), "Tanggal Sudah lewat", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getActivity(), "Tanggal Sudah Lewat", Toast.LENGTH_LONG).show();
                         } else {
                             jamPraktekTanggal(tgl, iddokter, klinikid);
                             //spinnerJamPraktek.setVisibility(View.VISIBLE);
